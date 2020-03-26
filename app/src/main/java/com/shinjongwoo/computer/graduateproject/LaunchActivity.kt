@@ -18,7 +18,8 @@ class LaunchActivity : AppCompatActivity() {
     val PERMISSIONS_REQUEST_CODE = 1000
     var PERMISSIONS = arrayOf<String>(
         Manifest.permission.CAMERA,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

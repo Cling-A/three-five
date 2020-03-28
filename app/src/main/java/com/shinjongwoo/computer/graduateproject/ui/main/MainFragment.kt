@@ -1,12 +1,15 @@
 package com.shinjongwoo.computer.graduateproject.ui.main
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
+import com.shinjongwoo.computer.graduateproject.MainActivity
 import com.shinjongwoo.computer.graduateproject.R
+import kotlinx.android.synthetic.main.main_fragment.*
+
 
 class MainFragment : Fragment() {
 
@@ -25,8 +28,11 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        textView1.text = "진짜 텍스트가 바뀌었는지 확인"
+        button2.setOnClickListener {
+            (activity as MainActivity)?.changedView()
+        }
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
     }
-
 }

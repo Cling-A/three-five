@@ -1,4 +1,4 @@
-package com.shinjongwoo.computer.graduateproject.kakao;
+package com.shinjongwoo.computer.graduateproject.kakao.login;
 
 import android.app.Activity;
 import android.app.Application;

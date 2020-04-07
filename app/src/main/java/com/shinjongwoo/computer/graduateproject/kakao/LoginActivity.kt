@@ -13,7 +13,6 @@ import com.kakao.usermgmt.UserManagement
 import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.exception.KakaoException
-import com.shinjongwoo.computer.graduateproject.MainActivity
 import com.shinjongwoo.computer.graduateproject.R
 import com.shinjongwoo.computer.graduateproject.kakao.friends.FriendsActivity
 

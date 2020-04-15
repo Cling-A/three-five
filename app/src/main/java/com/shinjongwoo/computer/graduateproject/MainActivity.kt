@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
 //asdf
+//0415
          */
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,

@@ -16,10 +16,28 @@
         android:id="@+id/shotBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxHeight="80dp"
+        android:maxWidth="80dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="40dp"
         android:background="@drawable/shot_button"
-        android:scaleX="0.5"
-        android:scaleY="0.5"
+        android:scaleX="1"
+        android:scaleY="1"
         app:srcCompat="@drawable/photo_icon_2" />
+
+    <ImageButton
+        android:id="@+id/changeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxHeight="80dp"
+        android:maxWidth="80dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_gravity="top|center_horizontal"
+        android:background="@drawable/shot_button"
+        android:scaleX="1"
+        android:scaleY="1"
+        app:srcCompat="@drawable/change_icon_2" />
 </FrameLayout>

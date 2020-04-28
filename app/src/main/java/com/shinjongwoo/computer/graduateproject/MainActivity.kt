@@ -43,6 +43,12 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionsResultCallback {
         // 런타임 퍼미션 완료될때 까지 화면에서 보이지 않게 해야합니다.
         surfaceView?.visibility = View.GONE
         shotBtn.setOnClickListener { mCameraPreview?.takePicture() }
+        changeButton.setOnClickListener {
+            if(CAMERA_FACING != Camera.CameraInfo.CAMERA_FACING_BACK)
+                CAMERA_FACING = Camera.CameraInfo.CAMERA_FACING_FRONT
+            else
+                CAMERA_FACING = Camera.CameraInfo.CAMERA_FACING_BACK
+        }
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
             val cameraPermission =
                 ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
@@ -141,7 +147,7 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionsResultCallback {
     companion object {
         private const val TAG = "android_camera_example"
         private const val PERMISSIONS_REQUEST_CODE = 100
-        private const val CAMERA_FACING =
+        private var CAMERA_FACING =
             Camera.CameraInfo.CAMERA_FACING_BACK // Camera.CameraInfo.CAMERA_FACING_FRONT
     }
 }

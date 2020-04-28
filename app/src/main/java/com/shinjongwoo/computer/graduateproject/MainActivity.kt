@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.main_activity.*
 
 
 class MainActivity : AppCompatActivity(), OnRequestPermissionsResultCallback {
-    private var REQUIRED_PERMISSIONS = arrayOf(
+    private var REQUIRED_PERMISSIONS = arrayOf( 
         Manifest.permission.CAMERA,
         Manifest.permission.WRITE_EXTERNAL_STORAGE
     )

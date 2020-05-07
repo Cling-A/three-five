@@ -13,8 +13,8 @@ import com.kakao.usermgmt.UserManagement
 import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.exception.KakaoException
+import com.shinjongwoo.computer.graduateproject.ChooseActivity
 import com.shinjongwoo.computer.graduateproject.R
-import com.shinjongwoo.computer.graduateproject.kakao.friends.FriendsActivity
 
 
 class LoginActivity : AppCompatActivity() {
@@ -81,7 +81,7 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 override fun onSuccess(result: MeV2Response) {
-                    val intent = Intent(applicationContext, FriendsActivity::class.java)
+                    val intent = Intent(applicationContext, ChooseActivity::class.java)
                     intent.putExtra("name", result.nickname)
                     intent.putExtra("profile", result.profileImagePath)
                     startActivity(intent)

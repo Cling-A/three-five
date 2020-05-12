@@ -1,153 +1,376 @@
+/*
+ * Copyright 2019 The TensorFlow Authors. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.shinjongwoo.computer.graduateproject
+
 import android.Manifest
+import android.app.Fragment
+import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.Camera
-import android.os.Bundle
-import android.view.SurfaceView
+import android.hardware.Camera.PreviewCallback
+import android.hardware.camera2.CameraAccessException
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
+import android.media.Image.Plane
+import android.media.ImageReader
+import android.media.ImageReader.OnImageAvailableListener
+import android.os.*
+import android.util.Size
+import android.view.Surface
 import android.view.View
 import android.view.WindowManager
-import android.widget.Button
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
-import androidx.core.content.ContextCompat
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.main_activity.*
+import androidx.appcompat.widget.SwitchCompat
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
-
-class MainActivity : AppCompatActivity(), OnRequestPermissionsResultCallback {
-    private var REQUIRED_PERMISSIONS = arrayOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-    )
-    private var mCameraPreview: CameraPreview? = null
-
-    // (참고로 Toast에서는 Context가 필요했습니다.)
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // 상태바를 안보이도록 합니다.
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-
-        // 화면 켜진 상태를 유지합니다.
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
-            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-        )
+abstract class MainActivity : AppCompatActivity(), OnImageAvailableListener,
+    PreviewCallback, CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+    @JvmField
+    protected var previewWidth = 0
+    @JvmField
+    protected var previewHeight = 0
+    val isDebug = false
+    private var handler: Handler? = null
+    private var handlerThread: HandlerThread? = null
+    private var useCamera2API = false
+    private var isProcessingFrame = false
+    private val yuvBytes = arrayOfNulls<ByteArray>(3)
+    private var rgbBytes: IntArray? = null
+    protected var luminanceStride = 0
+        private set
+    private var postInferenceCallback: Runnable? = null
+    private var imageConverter: Runnable? = null
+    private val bottomSheetLayout: LinearLayout? = null
+    private val gestureLayout: LinearLayout? = null
+    private val sheetBehavior: BottomSheetBehavior<LinearLayout>? = null
+    protected var frameValueTextView: TextView? = null
+    protected var cropValueTextView: TextView? = null
+    protected var inferenceTimeTextView: TextView? = null
+    protected var bottomSheetArrowImageView: ImageView? = null
+    private val plusImageView: ImageView? = null
+    private val minusImageView: ImageView? = null
+    private val apiSwitchCompat: SwitchCompat? = null
+    private val threadsTextView: TextView? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(null)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.main_activity)
-
-
-        // 런타임 퍼미션 완료될때 까지 화면에서 보이지 않게 해야합니다.
-        surfaceView?.visibility = View.GONE
-        shotBtn.setOnClickListener { mCameraPreview?.takePicture() }
-        changeButton.setOnClickListener {
-            if(CAMERA_FACING != Camera.CameraInfo.CAMERA_FACING_BACK)
-                CAMERA_FACING = Camera.CameraInfo.CAMERA_FACING_FRONT
-            else
-                CAMERA_FACING = Camera.CameraInfo.CAMERA_FACING_BACK
-        }
-        if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-            val cameraPermission =
-                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-            val writeExternalStoragePermission = ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            if (cameraPermission == PackageManager.PERMISSION_GRANTED
-                && writeExternalStoragePermission == PackageManager.PERMISSION_GRANTED
-            ) {
-                startCamera()
-            } else {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                        this,
-                        REQUIRED_PERMISSIONS[0]
-                    )
-                    || ActivityCompat.shouldShowRequestPermissionRationale(
-                        this,
-                        REQUIRED_PERMISSIONS[1]
-                    )
-                ) {
-                    Snackbar.make(
-                        container, "이 앱을 실행하려면 카메라와 외부 저장소 접근 권한이 필요합니다.",
-                        Snackbar.LENGTH_INDEFINITE
-                    ).setAction("확인") {
-                        ActivityCompat.requestPermissions(
-                            this@MainActivity, REQUIRED_PERMISSIONS,
-                            PERMISSIONS_REQUEST_CODE
-                        )
-                    }.show()
-                } else {
-                    // 2. 사용자가 퍼미션 거부를 한 적이 없는 경우에는 퍼미션 요청을 바로 합니다.
-                    // 요청 결과는 onRequestPermissionResult에서 수신됩니다.
-                    ActivityCompat.requestPermissions(
-                        this, REQUIRED_PERMISSIONS,
-                        PERMISSIONS_REQUEST_CODE
-                    )
-                }
-            }
+        if (hasPermission()) {
+            setFragment()
         } else {
-            val snackbar = Snackbar.make(
-                container, "디바이스가 카메라를 지원하지 않습니다.",
-                Snackbar.LENGTH_INDEFINITE
-            )
-            snackbar.setAction("확인") { snackbar.dismiss() }
-            snackbar.show()
+            requestPermission()
         }
     }
 
-    fun startCamera() {
+    protected fun getRgbBytes(): IntArray? {
+        imageConverter!!.run()
+        return rgbBytes
+    }
 
-        // Create the Preview view and set it as the content of this Activity.
-        mCameraPreview =
-            surfaceView?.let { CameraPreview(this, this, CAMERA_FACING, it) }
+    protected val luminance: ByteArray?
+        protected get() = yuvBytes[0]
+
+    /** Callback for android.hardware.Camera API  */
+    override fun onPreviewFrame(
+        bytes: ByteArray,
+        camera: Camera
+    ) {
+        if (isProcessingFrame) {
+            return
+        }
+        try {
+            // Initialize the storage bitmaps once when the resolution is known.
+            if (rgbBytes == null) {
+                val previewSize =
+                    camera.parameters.previewSize
+                previewHeight = previewSize.height
+                previewWidth = previewSize.width
+                rgbBytes = IntArray(previewWidth * previewHeight)
+                onPreviewSizeChosen(Size(previewSize.width, previewSize.height), 90)
+            }
+        } catch (e: Exception) {
+            return
+        }
+        isProcessingFrame = true
+        yuvBytes[0] = bytes
+        luminanceStride = previewWidth
+
+        postInferenceCallback = Runnable {
+            camera.addCallbackBuffer(bytes)
+            isProcessingFrame = false
+        }
+        processImage()
+    }
+
+    /** Callback for Camera2 API  */
+    override fun onImageAvailable(reader: ImageReader) {
+        // We need wait until we have some size from onPreviewSizeChosen
+        if (previewWidth == 0 || previewHeight == 0) {
+            return
+        }
+        if (rgbBytes == null) {
+            rgbBytes = IntArray(previewWidth * previewHeight)
+        }
+        try {
+            val image = reader.acquireLatestImage() ?: return
+            if (isProcessingFrame) {
+                image.close()
+                return
+            }
+            isProcessingFrame = true
+            Trace.beginSection("imageAvailable")
+            val planes = image.planes
+            fillBytes(planes, yuvBytes)
+            luminanceStride = planes[0].rowStride
+            val uvRowStride = planes[1].rowStride
+            val uvPixelStride = planes[1].pixelStride
+
+            postInferenceCallback = Runnable {
+                image.close()
+                isProcessingFrame = false
+            }
+            processImage()
+        } catch (e: Exception) {
+            Trace.endSection()
+            return
+        }
+        Trace.endSection()
+    }
+
+    @Synchronized
+    public override fun onStart() {
+        super.onStart()
+    }
+
+    @Synchronized
+    public override fun onResume() {
+        super.onResume()
+        handlerThread = HandlerThread("inference")
+        handlerThread!!.start()
+        handler = Handler(handlerThread!!.looper)
+    }
+
+    @Synchronized
+    public override fun onPause() {
+        handlerThread!!.quitSafely()
+        try {
+            handlerThread!!.join()
+            handlerThread = null
+            handler = null
+        } catch (e: InterruptedException) {
+        }
+        super.onPause()
+    }
+
+    @Synchronized
+    public override fun onStop() {
+        super.onStop()
+    }
+
+    @Synchronized
+    public override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    @Synchronized
+    protected fun runInBackground(r: Runnable?) {
+        if (handler != null) {
+            handler!!.post(r)
+        }
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grandResults: IntArray
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
-        if (requestCode == PERMISSIONS_REQUEST_CODE && grandResults.size == REQUIRED_PERMISSIONS.size) {
-            var check_result = true
-            for (result in grandResults) {
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    check_result = false
-                    break
-                }
-            }
-            if (check_result) {
-                startCamera()
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSIONS_REQUEST) {
+            if (allPermissionsGranted(
+                    grantResults
+                )
+            ) {
+                setFragment()
             } else {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                        this,
-                        REQUIRED_PERMISSIONS[0]
-                    )
-                    || ActivityCompat.shouldShowRequestPermissionRationale(
-                        this,
-                        REQUIRED_PERMISSIONS[1]
-                    )
-                ) {
-                    Snackbar.make(
-                        container, "퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요. ",
-                        Snackbar.LENGTH_INDEFINITE
-                    ).setAction("확인") { finish() }.show()
-                } else {
-                    Snackbar.make(
-                        container, "설정(앱 정보)에서 퍼미션을 허용해야 합니다. ",
-                        Snackbar.LENGTH_INDEFINITE
-                    ).setAction("확인") { finish() }.show()
-                }
+                requestPermission()
             }
         }
     }
 
+    private fun hasPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkSelfPermission(PERMISSION_CAMERA) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+    }
+
+    private fun requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (shouldShowRequestPermissionRationale(PERMISSION_CAMERA)) {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Camera permission is required for this demo",
+                    Toast.LENGTH_LONG
+                )
+                    .show()
+            }
+            requestPermissions(
+                arrayOf(PERMISSION_CAMERA),
+                PERMISSIONS_REQUEST
+            )
+        }
+    }
+
+    // Returns true if the device supports the required hardware level, or better.
+    private fun isHardwareLevelSupported(
+        characteristics: CameraCharacteristics, requiredLevel: Int
+    ): Boolean {
+        val deviceLevel =
+            characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)
+        return if (deviceLevel == CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY) {
+            requiredLevel == deviceLevel
+        } else requiredLevel <= deviceLevel
+        // deviceLevel is not LEGACY, can use numerical sort
+    }
+
+    private fun chooseCamera(): String? {
+        val manager =
+            getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        try {
+            for (cameraId in manager.cameraIdList) {
+                val characteristics =
+                    manager.getCameraCharacteristics(cameraId)
+
+                // We don't use a front facing camera in this sample.
+                val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
+                if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT) {
+                    continue
+                }
+                val map =
+                    characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+                        ?: continue
+
+                // Fallback to camera1 API for internal cameras that don't have full support.
+                // This should help with legacy situations where using the camera2 API causes
+                // distorted or otherwise broken previews.
+                useCamera2API = (facing == CameraCharacteristics.LENS_FACING_EXTERNAL
+                        || isHardwareLevelSupported(
+                    characteristics, CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL
+                ))
+
+                return cameraId
+            }
+        } catch (e: CameraAccessException) {
+
+        }
+        return null
+    }
+
+    protected fun setFragment() {
+        val cameraId = chooseCamera()
+        val fragment: Fragment
+        if (useCamera2API) {
+            val camera2Fragment = desiredPreviewFrameSize?.let {
+                CameraConnectionFragment.newInstance(
+                    object : CameraConnectionFragment.ConnectionCallback {
+                        override fun onPreviewSizeChosen(size: Size?, cameraRotation: Int) {
+                            if (size != null) {
+                                previewHeight = size.height
+                            }
+                            if (size != null) {
+                                previewWidth = size.width
+                            }
+                            this@MainActivity.onPreviewSizeChosen(size, cameraRotation)
+                        }
+                    },
+                    this,
+                    layoutId,
+                    it
+                )
+            }
+            if (camera2Fragment != null) {
+                camera2Fragment.setCamera(cameraId)
+            }
+            fragment = camera2Fragment!!
+        } else {
+            fragment =
+                LegacyCameraConnectionFragment(this, layoutId, desiredPreviewFrameSize)
+        }
+        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+    }
+
+    protected fun fillBytes(
+        planes: Array<Plane>,
+        yuvBytes: Array<ByteArray?>
+    ) {
+        // Because of the variable row stride it's not possible to know in
+        // advance the actual necessary dimensions of the yuv planes.
+        for (i in planes.indices) {
+            val buffer = planes[i].buffer
+            if (yuvBytes[i] == null) {
+
+                yuvBytes[i] = ByteArray(buffer.capacity())
+            }
+            buffer[yuvBytes[i]]
+        }
+    }
+
+    protected fun readyForNextImage() {
+        if (postInferenceCallback != null) {
+            postInferenceCallback!!.run()
+        }
+    }
+
+    protected val screenOrientation: Int
+        protected get() = when (windowManager.defaultDisplay.rotation) {
+            Surface.ROTATION_270 -> 270
+            Surface.ROTATION_180 -> 180
+            Surface.ROTATION_90 -> 90
+            else -> 0
+        }
+
+    override fun onCheckedChanged(
+        buttonView: CompoundButton,
+        isChecked: Boolean
+    ) {
+        setUseNNAPI(isChecked)
+        if (isChecked) apiSwitchCompat!!.text = "NNAPI" else apiSwitchCompat!!.text = "TFLITE"
+    }
+
+    override fun onClick(v: View) {}
+    protected fun showFrameInfo(frameInfo: String?) {}
+    protected fun showCropInfo(cropInfo: String?) {}
+    protected fun showInference(inferenceTime: String?) {}
+    protected abstract fun processImage()
+    protected abstract fun onPreviewSizeChosen(size: Size?, rotation: Int)
+    protected abstract val layoutId: Int
+    protected abstract val desiredPreviewFrameSize: Size?
+    protected abstract fun setNumThreads(numThreads: Int)
+    protected abstract fun setUseNNAPI(isChecked: Boolean)
+
     companion object {
-        private const val TAG = "android_camera_example"
-        private const val PERMISSIONS_REQUEST_CODE = 100
-        private var CAMERA_FACING =
-            Camera.CameraInfo.CAMERA_FACING_BACK // Camera.CameraInfo.CAMERA_FACING_FRONT
+        private const val PERMISSIONS_REQUEST = 1
+        private const val PERMISSION_CAMERA = Manifest.permission.CAMERA
+        private fun allPermissionsGranted(grantResults: IntArray): Boolean {
+            for (result in grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    return false
+                }
+            }
+            return true
+        }
     }
 }

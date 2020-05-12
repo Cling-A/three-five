@@ -12,6 +12,7 @@ import android.os.AsyncTask
 import android.os.Environment
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import java.io.*
 
@@ -213,6 +214,8 @@ internal class CameraPreview(
 
     fun takePicture() {
         mCamera!!.takePicture(shutterCallback, rawCallback, jpegCallback)
+        Toast.makeText(context,Environment.getExternalStorageDirectory()
+            .absolutePath + "/camtest",Toast.LENGTH_LONG).show()
     }
 
     var shutterCallback = ShutterCallback { }

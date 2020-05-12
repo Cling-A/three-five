@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".DetectorActivity">
             <intent-filter>
 
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -15,40 +15,43 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="116dp">
 
-        <com.google.android.material.tabs.TabLayout
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_weight="1">
+    <com.shinjongwoo.computer.graduateproject.customview.AutoFitTextureView
+        android:id="@+id/texture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="로그인" />
+    <com.shinjongwoo.computer.graduateproject.customview.OverlayView
+        android:id="@+id/tracking_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="알바없잖아" />
+    <ImageButton
+        android:id="@+id/shotBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxHeight="80dp"
+        android:maxWidth="80dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/shot_button"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:src="@drawable/photo_icon_2" />
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="뭐요" />
-        </com.google.android.material.tabs.TabLayout>
+    <ImageButton
+        android:id="@+id/changeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxHeight="80dp"
+        android:maxWidth="80dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_gravity="top|center_horizontal"
+        android:background="@drawable/shot_button"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:src="@drawable/change_icon_2" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Button" />
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="텍스트1" />
-
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

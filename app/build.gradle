@@ -21,7 +21,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    aaptOptions {
+        noCompress "tflite"
+        noCompress "lite"
+    }
 }
+project.ext.ASSET_DIR = projectDir.toString() + '/src/main/assets'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -58,4 +63,12 @@ dependencies {
 
     // STT sdk를 사용하기 위해 필요.
     implementation group: 'com.kakao.sdk', name: 'newtone', version: '6.0.1'
+
+
+
+    // TFLite
+    implementation 'com.wonderkiln:camerakit:0.13.1'
+    implementation 'org.tensorflow:tensorflow-lite:+'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }

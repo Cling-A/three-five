@@ -2,56 +2,19 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/launch"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainFragment">
+    tools:context=".ui.launch.LaunchFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
-        android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="116dp">
-
-    <com.shinjongwoo.computer.graduateproject.customview.AutoFitTextureView
-        android:id="@+id/texture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <com.shinjongwoo.computer.graduateproject.customview.OverlayView
-        android:id="@+id/tracking_overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <ImageButton
-        android:id="@+id/shotBtn"
+    <TextView
+        android:id="@+id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxHeight="80dp"
-        android:maxWidth="80dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="40dp"
-        android:background="@drawable/shot_button"
-        android:scaleX="1"
-        android:scaleY="1"
-        android:src="@drawable/photo_icon_2" />
+        android:text="LaunchFragment"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/changeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxHeight="80dp"
-        android:maxWidth="80dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:layout_gravity="top|center_horizontal"
-        android:background="@drawable/shot_button"
-        android:scaleX="1"
-        android:scaleY="1"
-        android:src="@drawable/change_icon_2" />
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

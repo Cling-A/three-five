@@ -13,7 +13,7 @@
         android:layout_height="match_parent" />
 
     <ImageButton
-        android:id="@+id/shotBtn"
+        android:id="@+id/btnDetectObject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxHeight="80dp"
@@ -28,7 +28,7 @@
         app:srcCompat="@drawable/photo_icon_2" />
 
     <ImageButton
-        android:id="@+id/changeButton"
+        android:id="@+id/btnToggleCamera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxHeight="80dp"

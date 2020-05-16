@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".kakao.LoginActivity" >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/ProfileBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Profile" />
+
+        <Button
+            android:id="@+id/FriendsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Friends" />
+
+        <Button
+            android:id="@+id/aBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PROFILE2" />
+
+        <Button
+            android:id="@+id/msgBtn1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SENDMSG1" />
+
+        <Button
+            android:id="@+id/msgBtn2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SENDMSG2" />
+
+        <Button
+            android:id="@+id/msgBtn3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SENDMSG3" />
+    </LinearLayout>
+</FrameLayout>

@@ -8,9 +8,9 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 
@@ -27,6 +27,8 @@ class LaunchActivity : AppCompatActivity() {
         Log.d("abcd","Launch Start")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.launch_activity)
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //퍼미션 상태 확인
             if (!hasPermissions(PERMISSIONS)) { //퍼미션 허가 안되어있다면 사용자에게 요청
                 requestPermissions(PERMISSIONS, PERMISSIONS_REQUEST_CODE)
@@ -77,6 +79,7 @@ class LaunchActivity : AppCompatActivity() {
     }
 
 
+
     @TargetApi(Build.VERSION_CODES.M)
     private fun showDialogForPermission(msg: String) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this@LaunchActivity)
@@ -89,5 +92,9 @@ class LaunchActivity : AppCompatActivity() {
             DialogInterface.OnClickListener { dialog, id -> finish() })
         builder.create().show()
     }
+
+
+
+
 
 }

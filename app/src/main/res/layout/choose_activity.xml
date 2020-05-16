@@ -4,20 +4,23 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".kakao.LoginActivity" >
+    tools:context=".ChooseActivity" >
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true">
+        android:orientation="vertical">
 
-        <com.kakao.usermgmt.LoginButton
-            android:id="@+id/com_kakao_login"
+        <Button
+            android:id="@+id/friends_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="30dp" />
-    </RelativeLayout>
+            android:text="friends" />
+
+        <Button
+            android:id="@+id/stt_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="STT" />
+    </LinearLayout>
 </FrameLayout>

@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetectorActivity" >
+    tools:context=".tflite.Camera.MainActivity" >
 
     <SurfaceView
         android:id="@+id/surfaceView"

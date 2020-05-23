@@ -13,8 +13,8 @@ import com.kakao.usermgmt.UserManagement
 import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.exception.KakaoException
-import com.shinjongwoo.computer.graduateproject.ChooseActivity
 import com.shinjongwoo.computer.graduateproject.R
+import com.shinjongwoo.computer.graduateproject.tflite.Camera.MainActivity
 
 
 class LoginActivity : AppCompatActivity() {
@@ -51,6 +51,10 @@ class LoginActivity : AppCompatActivity() {
         Session.getCurrentSession().removeCallback(sessionCallback)
     }
 
+
+
+
+
     private inner class SessionCallback : ISessionCallback {
         override fun onSessionOpened() {
             UserManagement.getInstance().me(object : MeV2ResponseCallback() {
@@ -81,7 +85,7 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 override fun onSuccess(result: MeV2Response) {
-                    val intent = Intent(applicationContext, ChooseActivity::class.java)
+                    val intent = Intent(applicationContext, MainActivity::class.java)
                     intent.putExtra("name", result.nickname)
                     intent.putExtra("profile", result.profileImagePath)
                     startActivity(intent)

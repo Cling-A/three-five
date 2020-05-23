@@ -10,6 +10,6 @@ class ListViewItem  {
         if(image == null)
             return "image is null"
         else
-            return "text : " + text + " / image is not null";
+            return "text : $text / image is not null";
     }
 }

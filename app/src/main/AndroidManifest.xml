@@ -51,12 +51,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ChooseActivity">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
         <activity android:name=".kakao.LoginActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.shinjongwoo.computer.graduateproject.kakao.LoginActivity
 import com.shinjongwoo.computer.graduateproject.tflite.Camera.MainActivity
 
 
@@ -34,7 +35,7 @@ class LaunchActivity : AppCompatActivity() {
             if (!hasPermissions(PERMISSIONS)) { //퍼미션 허가 안되어있다면 사용자에게 요청
                 requestPermissions(PERMISSIONS, PERMISSIONS_REQUEST_CODE)
             } else {
-                val mainIntent = Intent(this@LaunchActivity, MainActivity::class.java)
+                val mainIntent = Intent(this@LaunchActivity, LoginActivity::class.java)
                 Log.d("abcd", "LaunchActivity/ this worked 1")
                 startActivity(mainIntent)
                 Log.d("abcd", "LaunchActivity/ this worked 2")
@@ -71,7 +72,7 @@ class LaunchActivity : AppCompatActivity() {
                 val diskPermissionAccepted = (grantResults[1]
                         == PackageManager.PERMISSION_GRANTED)
                 if (!cameraPermissionAccepted || !diskPermissionAccepted) showDialogForPermission("앱을 실행하려면 카메라 권한이 필요합니다.") else {
-                    val mainIntent = Intent(this@LaunchActivity, MainActivity::class.java)
+                    val mainIntent = Intent(this@LaunchActivity, LoginActivity::class.java)
                     startActivity(mainIntent)
                     finish()
                 }

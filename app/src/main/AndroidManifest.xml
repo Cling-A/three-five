@@ -45,7 +45,7 @@
         </activity>
 
         <!-- 결과파트 -->
-        <activity android:name=".tflite.Classifier.ResultActivity">
+        <activity android:name=".tflite.classifier.ResultActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

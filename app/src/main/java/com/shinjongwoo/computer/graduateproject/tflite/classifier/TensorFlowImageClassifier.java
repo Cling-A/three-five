@@ -1,10 +1,9 @@
-package com.shinjongwoo.computer.graduateproject.tflite.Classifier;
+package com.shinjongwoo.computer.graduateproject.tflite.classifier;
 
 import android.annotation.SuppressLint;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import org.tensorflow.lite.Interpreter;
 

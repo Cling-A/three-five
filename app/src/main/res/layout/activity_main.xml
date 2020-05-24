@@ -5,7 +5,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".tflite.Camera.MainActivity">
 
     <com.wonderkiln.camerakit.CameraView
         android:id="@+id/cameraView"
@@ -21,25 +21,23 @@
         android:layout_marginBottom="40dp"
         android:adjustViewBounds="true"
         android:background="@drawable/shot_button"
-        android:maxWidth="70dp"
-        android:maxHeight="70dp"
+        android:maxWidth="80dp"
+        android:maxHeight="80dp"
         android:scaleType="fitCenter"
         android:scaleX="1"
         android:scaleY="1"
-        android:src="@drawable/photo_icon_1" />
+        android:src="@drawable/photo_icon_2" />
 
     <ImageButton
         android:id="@+id/btnToggleCamera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right|center_horizontal"
-        android:layout_marginBottom="40dp"
-        android:layout_marginRight="40dp"
+        android:maxHeight="80dp"
+        android:maxWidth="80dp"
         android:adjustViewBounds="true"
-        android:background="@drawable/shot_button"
-        android:maxWidth="70dp"
-        android:maxHeight="70dp"
         android:scaleType="fitCenter"
+        android:layout_gravity="top|center_horizontal"
+        android:background="@drawable/shot_button"
         android:scaleX="1"
         android:scaleY="1"
         android:src="@drawable/change_icon_1" />

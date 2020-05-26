@@ -86,7 +86,7 @@ class CustomDialog(context: Context) {
                     val confs = results?.getIntegerArrayList(SpeechRecognizerClient.KEY_CONFIDENCE_VALUES)
 
                     dlg.explainTxt.text = "이것이 맞나요?"
-                    dlg.resultTxt.text = texts?.get(0).toString()
+                    dlg.resultTxt.setText(texts?.get(0).toString())
                 }
 
                 override fun onAudioLevel(audioLevel: Float) {

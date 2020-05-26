@@ -128,6 +128,7 @@ class ResultActivity : AppCompatActivity() {
                                 "전송에 성공한 대상: " + result.successfulReceiverUuids()
                             )
                         }
+
                         if (result.failureInfo() != null) {
                             Log.e("KAKAO_API", "일부 사용자에게 메시 보내기 실패")
                             for (failureInfo in result.failureInfo()!!) {
@@ -139,6 +140,8 @@ class ResultActivity : AppCompatActivity() {
                                 )
                             }
                         }
+                        Toast.makeText(getApplicationContext(), "사진 전송이 완료되었습니다.", Toast.LENGTH_LONG).show();
+
                     }
                 })
     }

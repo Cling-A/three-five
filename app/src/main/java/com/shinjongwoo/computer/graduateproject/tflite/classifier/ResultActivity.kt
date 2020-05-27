@@ -42,12 +42,12 @@ class ResultActivity : AppCompatActivity() {
         Log.d("abcd", "Launch Start")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.result_activity)
-        capturedImage = intent.getParcelableExtra<Bitmap>("bitmap")
-        STTtext = intent.getStringExtra("text")
+//        capturedImage = intent.getParcelableExtra<Bitmap>("bitmap")
+//        STTtext = intent.getStringExtra("text")
         imageUrl = intent.getStringExtra("imageUrl")
 
-        resultText.text = STTtext
-        resultImage.setImageBitmap(capturedImage)
+//        resultText.text = STTtext
+//        resultImage.setImageBitmap(capturedImage)
 
         // init Part
         initUUIDs()
@@ -121,14 +121,16 @@ class ResultActivity : AppCompatActivity() {
                     }
 
                     override fun onSuccess(result : MessageSendResponse?) {
+                        var successCount = 0
+                        var failureCount = 0
                         if (result!!.successfulReceiverUuids() != null) {
                             Log.i("KAKAO_API", "친구에게 보내기 성공")
                             Log.d(
                                 "KAKAO_API",
                                 "전송에 성공한 대상: " + result.successfulReceiverUuids()
                             )
+                            successCount += result.successfulReceiverUuids()!!.size
                         }
-
                         if (result.failureInfo() != null) {
                             Log.e("KAKAO_API", "일부 사용자에게 메시 보내기 실패")
                             for (failureInfo in result.failureInfo()!!) {
@@ -139,8 +141,10 @@ class ResultActivity : AppCompatActivity() {
                                     "failure_uuids: " + failureInfo.receiverUuids()
                                 )
                             }
+                            failureCount += result.successfulReceiverUuids()!!.size
                         }
-                        Toast.makeText(getApplicationContext(), "사진 전송이 완료되었습니다.", Toast.LENGTH_LONG).show();
+
+                        Toast.makeText(getApplicationContext(), "사진 전송이 완료되었습니다.\n전송에 성공한 대상 : " + successCount + "\n전송에 실패한 대상 : " + failureCount, Toast.LENGTH_LONG).show();
 
                     }
                 })

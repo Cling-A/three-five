@@ -38,7 +38,7 @@
         </activity>
 
         <!-- 카메라파트 -->
-        <activity android:name=".tflite.Camera.MainActivity">
+        <activity android:name=".tflite.classifier.MainActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

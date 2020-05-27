@@ -14,7 +14,7 @@ import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.exception.KakaoException
 import com.shinjongwoo.computer.graduateproject.R
-import com.shinjongwoo.computer.graduateproject.tflite.Camera.MainActivity
+import com.shinjongwoo.computer.graduateproject.tflite.classifier.MainActivity
 
 
 class LoginActivity : AppCompatActivity() {

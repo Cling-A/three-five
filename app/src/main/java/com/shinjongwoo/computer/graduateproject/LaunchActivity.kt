@@ -10,10 +10,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.shinjongwoo.computer.graduateproject.kakao.LoginActivity
-import com.shinjongwoo.computer.graduateproject.tflite.Camera.MainActivity
 
 
 class LaunchActivity : AppCompatActivity() {

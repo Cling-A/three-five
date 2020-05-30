@@ -2,8 +2,13 @@ package com.shinjongwoo.computer.graduateproject.kakao.STT
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -140,6 +145,8 @@ class STTActivity : AppCompatActivity() {
 
 
     }
+
+
 
 
     override fun onDestroy() {

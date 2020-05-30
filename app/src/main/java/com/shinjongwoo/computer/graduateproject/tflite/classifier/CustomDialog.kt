@@ -2,14 +2,22 @@ package com.shinjongwoo.computer.graduateproject.tflite.classifier
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.Window
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageButton
 import com.kakao.sdk.newtoneapi.SpeechRecognizeListener
 import com.kakao.sdk.newtoneapi.SpeechRecognizerClient
 import com.kakao.sdk.newtoneapi.SpeechRecognizerManager
 import com.shinjongwoo.computer.graduateproject.R
+import com.shinjongwoo.computer.graduateproject.kakao.STT.TextToImage
+import com.shinjongwoo.computer.graduateproject.tflite.Camera.MainActivity
+import kotlinx.android.synthetic.main.result_activity.*
 import kotlinx.android.synthetic.main.stt_dialog.*
 
 
@@ -41,6 +49,11 @@ class CustomDialog(context: Context) {
         startUsingSpeechSDK()
         exitBtn.setOnClickListener {
             dlg.dismiss()
+        }
+
+        dlg.submitBtn.setOnClickListener {
+
+
         }
 
         // 커스텀 다이얼로그를 노출한다.
@@ -105,6 +118,7 @@ class CustomDialog(context: Context) {
             client!!.startRecording(true)
         }
     }
+
 
 // renInUiThread
 }

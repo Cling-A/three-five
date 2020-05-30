@@ -7,10 +7,25 @@
     android:layout_height="match_parent"
     tools:context=".tflite.Camera.MainActivity">
 
-    <com.wonderkiln.camerakit.CameraView
-        android:id="@+id/cameraView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.wonderkiln.camerakit.CameraView
+            android:id="@+id/cameraView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </com.wonderkiln.camerakit.CameraView>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4" />
+    </LinearLayout>
 
 
     <ImageButton
@@ -28,18 +43,21 @@
         android:scaleY="1"
         android:src="@drawable/photo_icon_2" />
 
+
     <ImageButton
         android:id="@+id/btnToggleCamera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxHeight="80dp"
-        android:maxWidth="80dp"
+        android:maxHeight="70dp"
+        android:maxWidth="70dp"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        android:layout_gravity="top|center_horizontal"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/shot_button"
         android:scaleX="1"
         android:scaleY="1"
-        android:src="@drawable/change_icon_1" />
+        app:srcCompat="@drawable/change_icon_2" />
 
 </FrameLayout>

@@ -1,6 +1,7 @@
 package com.shinjongwoo.computer.graduateproject.tflite.classifier
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -22,6 +23,7 @@ import com.kakao.network.callback.ResponseCallback
 import com.kakao.network.storage.ImageUploadResponse
 import com.kakao.sdk.newtoneapi.SpeechRecognizerManager
 import com.shinjongwoo.computer.graduateproject.R
+import com.shinjongwoo.computer.graduateproject.kakao.STT.TextToImage
 import kotlinx.android.synthetic.main.result_activity.*
 import java.io.File
 
@@ -66,8 +68,14 @@ class ResultActivity : AppCompatActivity() {
     }
 
     private fun onClickHandler() {
+        /*
         val dlg = CustomDialog(this)
         dlg.callFunction(STTtext!!);
+        */
+
+        intent = Intent(this, TextToImage::class.java)
+        intent.putExtra("image",capturedImage)
+        startActivity(intent)
     }
 
     // KakaoTalk Message function

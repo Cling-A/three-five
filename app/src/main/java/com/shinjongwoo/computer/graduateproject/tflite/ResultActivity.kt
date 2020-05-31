@@ -1,8 +1,9 @@
-package com.shinjongwoo.computer.graduateproject.tflite.classifier
+package com.shinjongwoo.computer.graduateproject.tflite
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -39,16 +40,16 @@ class ResultActivity : AppCompatActivity() {
     val templateArgs: MutableMap<String, String> = HashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("abcd", "Launch Start")
+        Log.d("abcd", "Result Start")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.result_activity)
-//        capturedImage = intent.getParcelableExtra<Bitmap>("bitmap")
-//        STTtext = intent.getStringExtra("text")
+        STTtext = intent.getStringExtra("result")
         imageUrl = intent.getStringExtra("imageUrl")
+        capturedImage = BitmapFactory.decodeFile(imageUrl)
 
-//        resultText.text = STTtext
-//        resultImage.setImageBitmap(capturedImage)
-
+        resultText.text = STTtext
+        resultImage.setImageBitmap(capturedImage)
+1
         // init Part
         initUUIDs()
         initImage()
@@ -234,4 +235,7 @@ class ResultActivity : AppCompatActivity() {
             }
         }
     }
+
+    public fun a(){}
+
 }

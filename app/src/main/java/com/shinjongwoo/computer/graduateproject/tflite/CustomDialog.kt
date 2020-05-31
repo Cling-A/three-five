@@ -1,4 +1,4 @@
-package com.shinjongwoo.computer.graduateproject.tflite.classifier
+package com.shinjongwoo.computer.graduateproject.tflite
 
 import android.app.Dialog
 import android.content.Context
@@ -18,13 +18,14 @@ class CustomDialog(context: Context) {
     private val dlg = Dialog(context)
     private lateinit var recordBtn : ImageButton
     private lateinit var exitBtn : Button
+    private lateinit var submitBtn : Button
     private var client : SpeechRecognizerClient ?= null
 
     // 호출할 다이얼로그 함수를 정의한다.
     fun callFunction(STTtext : String) {
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)   //타이틀바 제거
         dlg.setContentView(R.layout.stt_dialog)     //다이얼로그에 사용할 xml 파일을 불러옴
-        dlg.setCancelable(false)    //다이얼로그의 바깥 화면을 눌렀을 때 다이얼로그가 닫히지 않도록 함
+//        dlg.setCancelable(false)    //다이얼로그의 바깥 화면을 눌렀을 때 다이얼로그가 닫히지 않도록 함
 
 
         SpeechRecognizerManager.getInstance().initializeLibrary(context)
@@ -33,13 +34,17 @@ class CustomDialog(context: Context) {
         client = builder.build()
 
 
-
         recordBtn = dlg.findViewById(R.id.recordBtn)
         exitBtn = dlg.findViewById(R.id.exitBtn)
+        submitBtn = dlg.findViewById(R.id.submitBtn)
 
 
         startUsingSpeechSDK()
         exitBtn.setOnClickListener {
+            dlg.dismiss()
+        }
+
+        submitBtn.setOnClickListener{
             dlg.dismiss()
         }
 

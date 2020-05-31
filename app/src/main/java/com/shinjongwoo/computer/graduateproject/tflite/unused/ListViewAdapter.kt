@@ -1,4 +1,4 @@
-package com.shinjongwoo.computer.graduateproject.tflite.classifier
+package com.shinjongwoo.computer.graduateproject.tflite.unused
 
 import android.content.Context
 import android.graphics.Bitmap

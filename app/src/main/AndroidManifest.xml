@@ -25,9 +25,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!-- 카카오 로그인 -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
+
+        <!-- 구글 얼굴 인식-->
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="face" />
 
         <!-- 실행파트 -->
         <activity android:name=".LaunchActivity">
@@ -38,14 +44,14 @@
         </activity>
 
         <!-- 카메라파트 -->
-        <activity android:name=".tflite.classifier.MainActivity">
+        <activity android:name=".tflite.MainActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <!-- 결과파트 -->
-        <activity android:name=".tflite.classifier.ResultActivity">
+        <activity android:name=".tflite.ResultActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

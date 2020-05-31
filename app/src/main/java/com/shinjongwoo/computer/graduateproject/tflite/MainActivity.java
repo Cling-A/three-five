@@ -1,15 +1,20 @@
-package com.shinjongwoo.computer.graduateproject.tflite.classifier;
+package com.shinjongwoo.computer.graduateproject.tflite;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.FaceDetector;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.shinjongwoo.computer.graduateproject.R;
@@ -25,11 +30,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
     private ImageClassifier classifier;
@@ -74,66 +75,28 @@ public class MainActivity extends AppCompatActivity {
                 String capturedTime = sdf.format(Calendar.getInstance().getTime());
                 Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
 
-                // distribute face n sampling
+                if (classifier == null || this == null) {
+                    Toast.makeText(getApplicationContext(), "Uninitialized Classifier or invalid context.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                String textToShow = classifier.classifyFrame(Bitmap.createScaledBitmap(cameraKitImage.getBitmap(), 224, 224, true));
+
                 Bitmap bitmap = cameraKitImage.getBitmap();
-                bitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.RGB_565);
-                FaceDetector detector = new FaceDetector(bitmap.getWidth(), bitmap.getHeight(), 10);
-                FaceDetector.Face[] faces = new FaceDetector.Face[10];
-                int detectedCount = detector.findFaces(bitmap, faces);
-
-                Log.d("abcd", String.valueOf(bitmap.getConfig().compareTo(Bitmap.Config.RGB_565)));
-                Log.d("abcd", String.valueOf(bitmap.getConfig().compareTo(Bitmap.Config.ALPHA_8)));
-                Log.d("abcd", String.valueOf(bitmap.getConfig().compareTo(Bitmap.Config.ARGB_4444)));
-                Log.d("abcd", String.valueOf(bitmap.getConfig().compareTo(Bitmap.Config.ARGB_8888)));
-                Log.d("abcd", String.valueOf(bitmap.getConfig().compareTo(Bitmap.Config.HARDWARE)));
-                Log.d("abcd", String.valueOf(bitmap.getConfig().compareTo(Bitmap.Config.RGBA_F16)));
-
-                Log.d("abcd", "bitmap width : " + bitmap.getWidth() + " / height : " + bitmap.getHeight());
-                if(detectedCount == 0) {
-                    Log.d("abcd", "there is no face");
-                    Log.d("abcd", String.valueOf(detectedCount));
-                    Log.d("abcd", String.valueOf(faces[0].EULER_X));
-                    Log.d("abcd", String.valueOf(faces[0].EULER_Y));
-                    Log.d("abcd", String.valueOf(faces[0].EULER_Z));
-                }
-                else {
-                    Log.d("abcd", "face result start");
-                    for(int i = 0 ; i < detectedCount ; i ++) {
-                        Log.d("abcd", String.valueOf(faces.length));
-                        Log.d("abcd", String.valueOf(faces[i].EULER_X));
-                        Log.d("abcd", String.valueOf(faces[i].EULER_Y));
-                        Log.d("abcd", String.valueOf(faces[i].EULER_Z));
-                    }
-                    Log.d("abcd", "face result end");
-                }
-                byte[] bitmapByte = cameraKitImage.getJpeg();
-                BitmapFactory.Options options = new BitmapFactory.Options();
-
-                //TODO insampleSize 바꾸기
-                options.inSampleSize = setSimpleSize(cameraKitImage.getBitmap(), 224, 224);
-                Log.d("abcd", String.valueOf(options.inSampleSize));
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapByte, 0, bitmapByte.length, options);
-                Log.d("abcd", "Width : " + bitmap.getWidth() + " / height : " + bitmap.getHeight());
-
-//                classifyFrame(cameraKitImage.getBitmap());
+                Log.d("abcd", "Width : "+ bitmap.getWidth() + "/ Height : " + bitmap.getHeight());
+                bitmap = scalingImage(bitmap);
+                Log.d("abcd", "Width : "+ bitmap.getWidth() + "/ Height : " + bitmap.getHeight());
 
                 // store captured image
                 try {
                     File savedPhoto = Environment.getExternalStorageDirectory();
                     String imageUrl = savedPhoto.getPath()+"/DCIM/Camera/" + capturedTime + ".jpg";
                     outputStream = new FileOutputStream(imageUrl);
-//                    outputStream.write( bitmapToByteArray(bitmap));
-                    outputStream.write(cameraKitImage.getJpeg());
-                    cameraKitImage.getJpeg();
+                    outputStream.write(bitmapToByteArray(bitmap));
                     intent.putExtra("imageUrl", imageUrl);
-
                 } catch (java.io.IOException e) {
                     e.printStackTrace();
                 }
-
-
-
-//                intent.putExtra("bitmap", bitmap);
+                intent.putExtra("result", textToShow);
                 startActivity(intent);
             }
 
@@ -216,12 +179,22 @@ public class MainActivity extends AppCompatActivity {
         return byteArray ;
     }
 
-    private void classifyFrame(Bitmap bitmap) {
-        if (classifier == null || this == null) {
-            Log.d("abcd","Uninitialized Classifier or invalid context.");
-            return;
+    private Bitmap  scalingImage(Bitmap bitmap) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        Log.d("abcd", "Width : "+ bitmap.getWidth() + "/ Height : " + bitmap.getHeight());
+        int i = 60;
+        for(i = 60 ; i>= 0 ; i--){
+            if(width * height / 3600 * i * i < 1024*2048)
+                break;
         }
-        String textToShow = classifier.classifyFrame(bitmap);
-        Log.d("abcd", "new One : " + textToShow);
+
+        if ( i == 0 ) {
+            Log.d("abcd", "사진이 너무 고해상도입니다. 관리자에게 문의해주시길 바랍니다.");
+            return bitmap;
+        }
+        else
+            return Bitmap.createScaledBitmap(bitmap, width /60 *i, height / 60 * i, true);
     }
+
 }

@@ -11,7 +11,6 @@ import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.shinjongwoo.computer.graduateproject.kakao.LoginActivity
 
 
 class LaunchActivity : AppCompatActivity() {

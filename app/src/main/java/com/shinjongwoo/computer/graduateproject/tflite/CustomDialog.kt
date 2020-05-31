@@ -17,8 +17,8 @@ class CustomDialog(context: Context) {
     private val context: Context = context
     private val dlg = Dialog(context)
     private lateinit var recordBtn : ImageButton
-    private lateinit var exitBtn : Button
-    private lateinit var submitBtn : Button
+    private lateinit var firstExitBtn : Button
+    private lateinit var firstSubmitBtn : Button
     private var client : SpeechRecognizerClient ?= null
 
     // 호출할 다이얼로그 함수를 정의한다.
@@ -35,16 +35,17 @@ class CustomDialog(context: Context) {
 
 
         recordBtn = dlg.findViewById(R.id.recordBtn)
-        exitBtn = dlg.findViewById(R.id.exitBtn)
-        submitBtn = dlg.findViewById(R.id.submitBtn)
+        firstExitBtn = dlg.findViewById(R.id.firstExitBtn)
+        firstSubmitBtn = dlg.findViewById(R.id.firstSubmitBtn)
 
 
         startUsingSpeechSDK()
-        exitBtn.setOnClickListener {
+        firstExitBtn.setOnClickListener {
             dlg.dismiss()
         }
 
-        submitBtn.setOnClickListener{
+        firstSubmitBtn.setOnClickListener{
+
             dlg.dismiss()
         }
 
@@ -109,6 +110,8 @@ class CustomDialog(context: Context) {
             //음성인식 시작함
             client!!.startRecording(true)
         }
+
+        recordBtn.visibility = 1;
     }
 
 // renInUiThread

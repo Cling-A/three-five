@@ -183,8 +183,8 @@ public class MainActivity extends AppCompatActivity {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         Log.d("abcd", "Width : "+ bitmap.getWidth() + "/ Height : " + bitmap.getHeight());
-        int i = 60;
-        for(i = 60 ; i>= 0 ; i--){
+        int i;
+        for(i = 60 ; i >= 0 ; i--){
             if(width * height / 3600 * i * i < 1024*2048)
                 break;
         }

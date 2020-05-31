@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -26,7 +27,7 @@ import com.shinjongwoo.computer.graduateproject.R
 import kotlinx.android.synthetic.main.result_activity.*
 import java.io.File
 
-class ResultActivity : AppCompatActivity() {
+class ResultActivity : AppCompatActivity(), View.OnClickListener {
     // permission
     val RECORD_REQUEST_CODE = 1000
     val STORAGE_REQUEST_CODE = 1000
@@ -49,7 +50,7 @@ class ResultActivity : AppCompatActivity() {
 
         resultText.text = STTtext
         resultImage.setImageBitmap(capturedImage)
-1
+
         // init Part
         initUUIDs()
         initImage()
@@ -57,18 +58,13 @@ class ResultActivity : AppCompatActivity() {
 
         // Listener Part
         sendBtn.setOnClickListener{sendMyTemplate()}
-        sttBtn.setOnClickListener{onClickHandler()}
+        sttBtn.setOnClickListener(this)
         recommendBtn.setOnClickListener{sendSelected()}
     }
 
     override fun onDestroy() {
         super.onDestroy()
         SpeechRecognizerManager.getInstance().finalizeLibrary()
-    }
-
-    private fun onClickHandler() {
-        val dlg = CustomDialog(this)
-        dlg.callFunction(STTtext!!);
     }
 
     // KakaoTalk Message function
@@ -236,6 +232,18 @@ class ResultActivity : AppCompatActivity() {
         }
     }
 
-    public fun a(){}
+    override fun onClick(v: View?) {
+        when(v?.id) {
+            sttBtn.id -> {
+                val dlg = CustomDialog(this)
+                dlg.setOnOKClickedListener{ content ->
+                    resultImage.setImageBitmap(content)
+                }
+                dlg.callFunction(imageUrl!!);
+
+            }
+        }
+        sttBtn.setOnClickListener{}
+    }
 
 }

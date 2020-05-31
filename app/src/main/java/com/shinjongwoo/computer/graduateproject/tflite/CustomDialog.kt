@@ -2,15 +2,23 @@ package com.shinjongwoo.computer.graduateproject.tflite
 
 import android.app.Dialog
 import android.content.Context
+import android.graphics.*
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
+import android.view.View
 import android.view.Window
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
 import com.kakao.sdk.newtoneapi.SpeechRecognizeListener
 import com.kakao.sdk.newtoneapi.SpeechRecognizerClient
 import com.kakao.sdk.newtoneapi.SpeechRecognizerManager
 import com.shinjongwoo.computer.graduateproject.R
+import kotlinx.android.synthetic.main.result_activity.*
 import kotlinx.android.synthetic.main.stt_dialog.*
+import java.io.ByteArrayOutputStream
+import java.io.FileOutputStream
 
 
 class CustomDialog(context: Context) {
@@ -20,13 +28,15 @@ class CustomDialog(context: Context) {
     private lateinit var firstExitBtn : Button
     private lateinit var firstSubmitBtn : Button
     private var client : SpeechRecognizerClient ?= null
+    private var outputStream: FileOutputStream? = null
+    private lateinit var listener : MyDialogOKClickedListener
+
 
     // 호출할 다이얼로그 함수를 정의한다.
-    fun callFunction(STTtext : String) {
+    fun callFunction(imageUrl : String) {
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)   //타이틀바 제거
         dlg.setContentView(R.layout.stt_dialog)     //다이얼로그에 사용할 xml 파일을 불러옴
-//        dlg.setCancelable(false)    //다이얼로그의 바깥 화면을 눌렀을 때 다이얼로그가 닫히지 않도록 함
-
+        dlg.setCancelable(false)    //다이얼로그의 바깥 화면을 눌렀을 때 다이얼로그가 닫히지 않도록 함
 
         SpeechRecognizerManager.getInstance().initializeLibrary(context)
         val builder =
@@ -46,6 +56,11 @@ class CustomDialog(context: Context) {
 
         firstSubmitBtn.setOnClickListener{
 
+            val sttText : String = dlg.resultTxt.text.toString()
+            var bitmap = mark(BitmapFactory.decodeFile(imageUrl), sttText)
+            outputStream = FileOutputStream(imageUrl)
+            outputStream!!.write(bitmapToByteArray(bitmap!!))
+            listener.onOKClicked(bitmap)
             dlg.dismiss()
         }
 
@@ -111,8 +126,51 @@ class CustomDialog(context: Context) {
             client!!.startRecording(true)
         }
 
-        recordBtn.visibility = 1;
+        recordBtn.visibility = View.VISIBLE;
     }
 
-// renInUiThread
+    fun mark(src: Bitmap, watermark: String?): Bitmap? {
+        val w = src.width
+        val h = src.height
+        val shader: Shader = LinearGradient(
+            0F,
+            0F,
+            100F,
+            100F,
+            Color.TRANSPARENT,
+            Color.BLACK,
+            Shader.TileMode.CLAMP
+        )
+        val result = Bitmap.createBitmap(w, h, src.config)
+        val canvas = Canvas(result)
+        canvas.drawBitmap(src, 0f, 0f, null)
+        val paint = Paint()
+        paint.setColor(Color.WHITE)
+        paint.setTextSize(100F)
+        paint.setAntiAlias(true)
+        paint.setShader(shader)
+        paint.setUnderlineText(false)
+        canvas.drawText(watermark, 10f, h - 15.toFloat(), paint)
+        return result
+    }
+
+    fun bitmapToByteArray(`$bitmap`: Bitmap): ByteArray? {
+        val stream = ByteArrayOutputStream()
+        `$bitmap`.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        return stream.toByteArray()
+    }
+
+
+    fun setOnOKClickedListener(listener: (Bitmap) -> Unit) {
+        this.listener = object: MyDialogOKClickedListener {
+            override fun onOKClicked(content: Bitmap) {
+                listener(content)
+            }
+        }
+    }
+
+    interface MyDialogOKClickedListener {
+        fun onOKClicked(content : Bitmap)
+    }
+
 }

@@ -17,7 +17,7 @@
 
 
     <application
-        android:name=".kakao.login.GlobalApplication"
+        android:name=".kakaoLogin.GlobalApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -53,18 +53,6 @@
         <!-- 결과파트 -->
         <activity android:name=".tflite.ResultActivity">
             <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".kakao.LoginActivity">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".kakao.friends.FriendsActivity">
-            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -75,7 +63,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".kakao.STT.STTActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

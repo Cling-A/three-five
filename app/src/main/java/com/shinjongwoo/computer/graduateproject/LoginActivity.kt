@@ -1,4 +1,4 @@
-package com.shinjongwoo.computer.graduateproject.kakao
+package com.shinjongwoo.computer.graduateproject
 
 import android.content.Intent
 import android.os.Bundle

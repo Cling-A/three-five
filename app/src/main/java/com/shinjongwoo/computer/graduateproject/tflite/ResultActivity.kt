@@ -149,6 +149,7 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
 
     // KakaoTalk Init function
     private fun initImage(){
+        sendBtn.isEnabled = false;
         val imageFile = File(imageUrl)
 
         KakaoLinkService.getInstance()
@@ -162,7 +163,7 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
                     Log.d("KAKAO_API", "URL: " + result.original.url)
                     convertedImageUrl = result.original.url
                     templateArgs["THU"] = result.original.url
-                    templateArgs["des_main"] = "제목부분"
+                    sendBtn.isEnabled = true;
                 }
             })
     }
@@ -235,15 +236,14 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id) {
             sttBtn.id -> {
+                Log.d("abcd", "sttBtn clicked")
                 val dlg = CustomDialog(this)
                 dlg.setOnOKClickedListener{ content ->
                     resultImage.setImageBitmap(content)
+                    initImage()
                 }
                 dlg.callFunction(imageUrl!!);
-
             }
         }
-        sttBtn.setOnClickListener{}
     }
-
 }

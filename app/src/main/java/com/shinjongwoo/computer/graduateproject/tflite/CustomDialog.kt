@@ -4,18 +4,14 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.*
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.view.Window
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
+import android.widget.*
 import com.kakao.sdk.newtoneapi.SpeechRecognizeListener
 import com.kakao.sdk.newtoneapi.SpeechRecognizerClient
 import com.kakao.sdk.newtoneapi.SpeechRecognizerManager
 import com.shinjongwoo.computer.graduateproject.R
-import kotlinx.android.synthetic.main.result_activity.*
 import kotlinx.android.synthetic.main.stt_dialog.*
 import java.io.ByteArrayOutputStream
 import java.io.FileOutputStream
@@ -24,9 +20,18 @@ import java.io.FileOutputStream
 class CustomDialog(context: Context) {
     private val context: Context = context
     private val dlg = Dialog(context)
+
     private lateinit var recordBtn : ImageButton
     private lateinit var firstExitBtn : Button
     private lateinit var firstSubmitBtn : Button
+    private lateinit var secondExitBtn : Button
+    private lateinit var secondSubmitBtn : Button
+
+    private lateinit var sttLayout: LinearLayout
+    private lateinit var resultLayout: LinearLayout
+
+    private var bitmap : Bitmap ? = null
+
     private var client : SpeechRecognizerClient ?= null
     private var outputStream: FileOutputStream? = null
     private lateinit var listener : MyDialogOKClickedListener
@@ -47,24 +52,37 @@ class CustomDialog(context: Context) {
         recordBtn = dlg.findViewById(R.id.recordBtn)
         firstExitBtn = dlg.findViewById(R.id.firstExitBtn)
         firstSubmitBtn = dlg.findViewById(R.id.firstSubmitBtn)
-
+        secondExitBtn = dlg.findViewById(R.id.secondExitBtn)
+        secondSubmitBtn = dlg.findViewById(R.id.secondSubmitBtn)
+        sttLayout = dlg.findViewById(R.id.sttLayout)
+        resultLayout = dlg.findViewById(R.id.resultLayout)
 
         startUsingSpeechSDK()
         firstExitBtn.setOnClickListener {
             dlg.dismiss()
         }
-
+        secondExitBtn.setOnClickListener {
+            dlg.dismiss()
+        }
         firstSubmitBtn.setOnClickListener{
-
+            toggleVisibility(View.INVISIBLE)
             val sttText : String = dlg.resultTxt.text.toString()
-            var bitmap = mark(BitmapFactory.decodeFile(imageUrl), sttText)
+            bitmap = mark(BitmapFactory.decodeFile(imageUrl), sttText)
+            dlg.sttImageView.setImageBitmap(bitmap)
+        }
+
+        secondSubmitBtn.setOnClickListener{
+            toggleVisibility(View.INVISIBLE)
+
             outputStream = FileOutputStream(imageUrl)
             outputStream!!.write(bitmapToByteArray(bitmap!!))
-            listener.onOKClicked(bitmap)
+
+            listener.onOKClicked(bitmap!!)
             dlg.dismiss()
         }
 
         // 커스텀 다이얼로그를 노출한다.
+        toggleVisibility(View.VISIBLE)
         dlg.show()
     }
 
@@ -125,7 +143,6 @@ class CustomDialog(context: Context) {
             //음성인식 시작함
             client!!.startRecording(true)
         }
-
         recordBtn.visibility = View.VISIBLE;
     }
 
@@ -154,12 +171,27 @@ class CustomDialog(context: Context) {
         return result
     }
 
-    fun bitmapToByteArray(`$bitmap`: Bitmap): ByteArray? {
+    private fun bitmapToByteArray(`$bitmap`: Bitmap): ByteArray? {
         val stream = ByteArrayOutputStream()
         `$bitmap`.compress(Bitmap.CompressFormat.JPEG, 100, stream)
         return stream.toByteArray()
     }
 
+    private fun toggleVisibility(visibility : Int){
+        when(visibility){
+            View.VISIBLE -> {
+                sttLayout.visibility = View.VISIBLE
+                resultLayout.visibility = View.INVISIBLE
+            }
+            View.INVISIBLE -> {
+                sttLayout.visibility = View.INVISIBLE
+                resultLayout.visibility = View.VISIBLE
+            }
+            else -> {
+                Log.d("abcd", "잘못된 값 입력")
+            }
+        }
+    }
 
     fun setOnOKClickedListener(listener: (Bitmap) -> Unit) {
         this.listener = object: MyDialogOKClickedListener {

@@ -7,6 +7,7 @@
 
 
     <LinearLayout
+        android:id="@+id/resultLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -14,7 +15,7 @@
         tools:layout_editor_absoluteY="731dp">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/sttImageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:srcCompat="@tools:sample/avatars" />
@@ -47,6 +48,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/sttLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"

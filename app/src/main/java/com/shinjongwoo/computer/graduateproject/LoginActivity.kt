@@ -21,13 +21,11 @@ class LoginActivity : AppCompatActivity() {
     private var sessionCallback: SessionCallback? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("abcd","Login Create Start")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
         sessionCallback = SessionCallback()
         Session.getCurrentSession().addCallback(sessionCallback)
         Session.getCurrentSession().checkAndImplicitOpen()
-        Log.d("abcd","Login Create End")
     }
 
     override fun onActivityResult(

@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -25,16 +26,20 @@ import com.wonderkiln.camerakit.CameraKitImage;
 import com.wonderkiln.camerakit.CameraKitVideo;
 import com.wonderkiln.camerakit.CameraView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.StringTokenizer;
 
 public class MainActivity extends AppCompatActivity {
     private ImageClassifier classifier;
-
+    private Intent intent;
     private ImageButton btnDetectObject, btnToggleCamera;
     private CameraView cameraView;
 
@@ -70,21 +75,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onImage(CameraKitImage cameraKitImage) {
-                // Filename n path
+                // Filename & path
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
                 String capturedTime = sdf.format(Calendar.getInstance().getTime());
-                Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
+                intent = new Intent(getApplicationContext(), ResultActivity.class);
 
-                if (classifier == null || this == null) {
-                    Toast.makeText(getApplicationContext(), "Uninitialized Classifier or invalid context.", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                String textToShow = classifier.classifyFrame(Bitmap.createScaledBitmap(cameraKitImage.getBitmap(), 224, 224, true));
-
-                Bitmap bitmap = cameraKitImage.getBitmap();
-                Log.d("abcd", "Width : "+ bitmap.getWidth() + "/ Height : " + bitmap.getHeight());
-                bitmap = scalingImage(bitmap);
-                Log.d("abcd", "Width : "+ bitmap.getWidth() + "/ Height : " + bitmap.getHeight());
+                Bitmap bitmap = scalingImage(cameraKitImage.getBitmap());
 
                 // store captured image
                 try {
@@ -93,11 +89,10 @@ public class MainActivity extends AppCompatActivity {
                     outputStream = new FileOutputStream(imageUrl);
                     outputStream.write(bitmapToByteArray(bitmap));
                     intent.putExtra("imageUrl", imageUrl);
+                    faceDetection(cameraKitImage, imageUrl);
                 } catch (java.io.IOException e) {
                     e.printStackTrace();
                 }
-                intent.putExtra("result", textToShow);
-                startActivity(intent);
             }
 
             @Override
@@ -151,27 +146,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // 이미지 Resize 함수
-    private int setSimpleSize(Bitmap bitmap, int requestWidth, int requestHeight){
-        // 이미지 사이즈를 체크할 원본 이미지 가로/세로 사이즈를 임시 변수에 대입.
-        int originalWidth = bitmap.getWidth();
-        int originalHeight = bitmap.getHeight();
-
-        Log.d("abcd", "originalWidth : " + bitmap.getWidth());
-        Log.d("abcd", "originalHeigth : " + bitmap.getHeight());
-        // 원본 이미지 비율인 1로 초기화
-        int size = 1;
-
-        // 해상도가 깨지지 않을만한 요구되는 사이즈까지 2의 배수의 값으로 원본 이미지를 나눈다.
-        while(requestWidth < originalWidth || requestHeight < originalHeight){
-            originalWidth = originalWidth / 2;
-            originalHeight = originalHeight / 2;
-
-            size = size * 2;
-        }
-        return size;
-    }
-
     public byte[] bitmapToByteArray( Bitmap $bitmap ) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
         $bitmap.compress( Bitmap.CompressFormat.JPEG, 100, stream) ;
@@ -196,5 +170,51 @@ public class MainActivity extends AppCompatActivity {
         else
             return Bitmap.createScaledBitmap(bitmap, width /60 *i, height / 60 * i, true);
     }
+    private void faceDetection(CameraKitImage cameraKitImage, String imageUrl){
+        DetectionThread detectionThread = new DetectionThread(cameraKitImage, imageUrl);
+        detectionThread.start();
+    }
 
+    private class DetectionThread extends Thread {
+        private CameraKitImage cameraKitImage;
+        private String imageUrl;
+
+        public DetectionThread(CameraKitImage cameraKitImage,String imageUrl){
+            this.cameraKitImage = cameraKitImage;
+            this.imageUrl = imageUrl;
+        }
+
+        @Override
+        public void run() {
+            JSONArray resp = HttpConnectionUtil.postRequest(imageUrl);
+            try {
+                for ( int i = 0 ; i < resp.length() ; i++) {
+                    String res = imageRecognition(Bitmap.createBitmap(cameraKitImage.getBitmap()
+                            , resp.getJSONObject(i).getInt("x")
+                            , resp.getJSONObject(i).getInt("y")
+                            , resp.getJSONObject(i).getInt("w")
+                            , resp.getJSONObject(i).getInt("h")));
+                    resp.getJSONObject(i).put("name", res);
+                }
+                intent.putExtra("faces", resp.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            startActivity(intent);
+        }
+    }
+
+    public String imageRecognition(Bitmap bitmap){
+        Log.d("abcd", "imageRecognition start");
+
+        if (classifier == null || this == null) {
+            Toast.makeText(getApplicationContext(), "Uninitialized Classifier or invalid context.", Toast.LENGTH_LONG).show();
+            return null;
+        }
+        String result = classifier.classifyFrame(Bitmap.createScaledBitmap(bitmap, 224, 224, true));
+        StringTokenizer sb = new StringTokenizer(result, "\n");
+        sb.nextToken();
+        return sb.nextToken();
+    }
 }

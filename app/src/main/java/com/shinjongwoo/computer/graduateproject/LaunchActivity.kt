@@ -23,7 +23,6 @@ class LaunchActivity : AppCompatActivity() {
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("abcd","Launch Start")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.launch_activity)
 
@@ -33,10 +32,7 @@ class LaunchActivity : AppCompatActivity() {
                 requestPermissions(PERMISSIONS, PERMISSIONS_REQUEST_CODE)
             } else {
                 val mainIntent = Intent(this@LaunchActivity, LoginActivity::class.java)
-                Log.d("abcd", "LaunchActivity/ this worked 1")
                 startActivity(mainIntent)
-                Log.d("abcd", "LaunchActivity/ this worked 2")
-
                 finish()
             }
         }

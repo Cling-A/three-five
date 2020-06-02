@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -25,6 +26,7 @@ import com.kakao.network.storage.ImageUploadResponse
 import com.kakao.sdk.newtoneapi.SpeechRecognizerManager
 import com.shinjongwoo.computer.graduateproject.R
 import kotlinx.android.synthetic.main.result_activity.*
+import org.json.JSONArray
 import java.io.File
 
 class ResultActivity : AppCompatActivity(), View.OnClickListener {
@@ -33,7 +35,6 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
     val STORAGE_REQUEST_CODE = 1000
 
     var capturedImage : Bitmap ?= null
-    var STTtext : String  = "제목 부분"
     var imageUrl : String ?= null
     var uuids =  mutableListOf<String>();
     var convertedImageUrl : String ?= null
@@ -44,11 +45,20 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
         Log.d("abcd", "Result Start")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.result_activity)
-        STTtext = intent.getStringExtra("result")
+        val faces = JSONArray(intent.getStringExtra("faces"))
+        for(i in 0 until faces.length()){
+            val facesIterator = faces.getJSONObject(i)
+            Log.d("abcd", "넘어온  $i 번째 x : " + facesIterator.getInt("x"))
+            Log.d("abcd", "넘어온  $i 번째 y : " + facesIterator.getInt("y"))
+            Log.d("abcd", "넘어온  $i 번째 w : " + facesIterator.getInt("w"))
+            Log.d("abcd", "넘어온  $i 번째 h : " + facesIterator.getInt("h"))
+            Log.d("abcd", "넘어온  $i 번째 name : " + facesIterator.getString("name"))
+        }
+
+
         imageUrl = intent.getStringExtra("imageUrl")
         capturedImage = BitmapFactory.decodeFile(imageUrl)
 
-        resultText.text = STTtext
         resultImage.setImageBitmap(capturedImage)
 
         // init Part

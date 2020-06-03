@@ -45,6 +45,7 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
         Log.d("abcd", "Result Start")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.result_activity)
+
         val faces = JSONArray(intent.getStringExtra("faces"))
         for(i in 0 until faces.length()){
             val facesIterator = faces.getJSONObject(i)

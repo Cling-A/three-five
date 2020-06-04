@@ -117,9 +117,9 @@ public class HttpConnectionUtil {
                 iterator = jsonArray.getJSONObject(i);
                 JSONObject data = new JSONObject();
                 data.put("x",  Math.round(iterator.getDouble("x") * width));
-                data.put("y",  Math.round(iterator.getDouble("y") * width));
+                data.put("y",  Math.round(iterator.getDouble("y") * height));
                 data.put("w",  Math.round(iterator.getDouble("w") * width));
-                data.put("h",  Math.round(iterator.getDouble("h") * width));
+                data.put("h",  Math.round(iterator.getDouble("h") * height));
                 result.put(data);
             }
             return result;

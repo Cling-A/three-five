@@ -10,10 +10,7 @@ import android.view.View
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.SeekBar
+import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
 import com.kakao.sdk.newtoneapi.SpeechRecognizeListener
 import com.kakao.sdk.newtoneapi.SpeechRecognizerClient
@@ -33,6 +30,18 @@ class CustomDialog(context: Context) {
     private lateinit var secondExitBtn : Button
     private lateinit var secondSubmitBtn : Button
 
+    private lateinit var redButton : Button
+    private lateinit var orangeButton : Button
+    private lateinit var yellowButton : Button
+    private lateinit var greenButton : Button
+    private lateinit var blueButton : Button
+    private lateinit var purpleButton : Button
+    private lateinit var whiteButton : Button
+    private lateinit var blackButton : Button
+    private lateinit var seekBar : SeekBar
+
+    private lateinit var sttView : TextView
+
     private lateinit var sttLayout: LinearLayout
     private lateinit var resultLayout: LinearLayout
 
@@ -47,10 +56,9 @@ class CustomDialog(context: Context) {
 
     private var oldXvalue = 0f
     private var oldYvalue = 0f
-
-    private var size = 10f
-
-
+    private var sttText : String = ""
+    private var moveX = 0f;
+    private var moveY = 0f;
 
     // 호출할 다이얼로그 함수를 정의한다.
     fun callFunction(imageUrl : String) {
@@ -63,37 +71,10 @@ class CustomDialog(context: Context) {
             SpeechRecognizerClient.Builder().setServiceType(SpeechRecognizerClient.SERVICE_TYPE_WEB)
         client = builder.build()
 
-        recordBtn = dlg.findViewById(R.id.recordBtn)
-        firstSubmitBtn = dlg.findViewById(R.id.firstSubmitBtn)
-        firstExitBtn = dlg.findViewById(R.id.firstExitBtn)
-        secondExitBtn = dlg.findViewById(R.id.secondExitBtn)
-        secondSubmitBtn = dlg.findViewById(R.id.secondSubmitBtn)
-        sttLayout = dlg.findViewById(R.id.sttLayout)
-        resultLayout = dlg.findViewById(R.id.resultLayout)
+        initBtn();
+        setBtnListener(imageUrl);
 
         startUsingSpeechSDK()
-        firstExitBtn.setOnClickListener {
-            dlg.dismiss()
-        }
-        secondExitBtn.setOnClickListener {
-            dlg.dismiss()
-        }
-        firstSubmitBtn.setOnClickListener{
-            toggleVisibility(View.INVISIBLE)
-            val sttText : String = dlg.resultTxt.text.toString()
-            bitmap = mark(BitmapFactory.decodeFile(imageUrl), sttText)
-            dlg.sttImageView.setImageBitmap(bitmap)
-        }
-
-        secondSubmitBtn.setOnClickListener{
-            toggleVisibility(View.INVISIBLE)
-
-            outputStream = FileOutputStream(imageUrl)
-            outputStream!!.write(bitmapToByteArray(bitmap!!))
-
-            listener.onOKClicked(bitmap!!)
-            dlg.dismiss()
-        }
 
         // 커스텀 다이얼로그를 노출한다.
         toggleVisibility(View.VISIBLE)
@@ -175,12 +156,19 @@ class CustomDialog(context: Context) {
         val canvas = Canvas(result)
         canvas.drawBitmap(src, 0f, 0f, null)
         paint = Paint()
-        paint.setColor(Color.WHITE)
-        paint.setTextSize(100F)
-        paint.setAntiAlias(true)
-        paint.setShader(shader)
-        paint.setUnderlineText(false)
-        canvas.drawText(watermark, 10f, h - 15.toFloat(), paint)
+        paint!!.setColor(Color.WHITE)
+        paint!!.setTextSize(100F)
+        paint!!.setAntiAlias(true)
+        paint!!.setShader(shader)
+        paint!!.setUnderlineText(false)
+
+        Log.d("drawText1","X =" + moveX)
+        Log.d("drawText1","Y =" + moveY)
+        Log.d("drawText1", "sttText = " + sttText)
+        canvas.drawText(sttText, moveX,moveY, paint)
+        Log.d("drawText2","X =" + moveX)
+        Log.d("drawText2","Y =" + moveY)
+        Log.d("drawText2", "sttText = " + sttText)
         return result
     }
 
@@ -219,124 +207,174 @@ class CustomDialog(context: Context) {
     }
 
     private fun initBtn(){
-        redButton.setOnTouchListener(OnTouchListener { v, e ->
-            if (e.action == MotionEvent.ACTION_DOWN) {
-                textView.setTextColor(Color.parseColor("#FF0000"))
-            }
-            false
-        })
+        recordBtn = dlg.findViewById(R.id.recordBtn)
+        firstSubmitBtn = dlg.findViewById(R.id.firstSubmitBtn)
+        firstExitBtn = dlg.findViewById(R.id.firstExitBtn)
+        secondExitBtn = dlg.findViewById(R.id.secondExitBtn)
+        secondSubmitBtn = dlg.findViewById(R.id.secondSubmitBtn)
 
-        orangeButton.setOnTouchListener(OnTouchListener { v, e ->
-            if (e.action == MotionEvent.ACTION_DOWN) {
-                textView.setTextColor(Color.parseColor("#FFA500"))
-            }
-            false
-        })
+        // colorBtn
+        redButton = dlg.findViewById(R.id.redButton)
+        orangeButton = dlg.findViewById(R.id.orangeButton)
+        yellowButton = dlg.findViewById(R.id.yellowButton)
+        greenButton = dlg.findViewById(R.id.greenButton)
+        blueButton = dlg.findViewById(R.id.blueButton)
+        purpleButton = dlg.findViewById(R.id.purpleButton)
+        whiteButton = dlg.findViewById(R.id.whiteButton)
+        blackButton = dlg.findViewById(R.id.blackButton)
+        sttView = dlg.findViewById(R.id.sttView)
 
-        yellowButton.setOnTouchListener(OnTouchListener { v, e ->
-            if (e.action == MotionEvent.ACTION_DOWN) {
-                textView.setTextColor(Color.parseColor("#FFFF00"))
-            }
-            false
-        })
+        // FontSize
+        seekBar = dlg.findViewById(R.id.seekBar)
 
-        greenButton.setOnTouchListener(OnTouchListener { v, e ->
-            if (e.action == MotionEvent.ACTION_DOWN) {
-                textView.setTextColor(Color.parseColor("#008000"))
-            }
-            false
-        })
+        // Layout
+        sttLayout = dlg.findViewById(R.id.sttLayout)
+        resultLayout = dlg.findViewById(R.id.resultLayout)
+    }
 
-        blueButton.setOnTouchListener(OnTouchListener { v, e ->
-            if (e.action == MotionEvent.ACTION_DOWN) {
-                textView.setTextColor(Color.parseColor("#0000FF"))
-            }
-            false
-        })
+    private fun setBtnListener(imageUrl : String){
+        redButton.setOnClickListener{
+            sttView.setTextColor(Color.parseColor("#FF0000"))
+        }
 
-        purpleButton.setOnTouchListener(OnTouchListener { v, e ->
-            if (e.action == MotionEvent.ACTION_DOWN) {
-                textView.setTextColor(Color.parseColor("#800080"))
-            }
-            false
-        })
+        orangeButton.setOnClickListener{
+            sttView.setTextColor(Color.parseColor("#FFA500"))
+        }
 
-        whiteButton.setOnTouchListener(OnTouchListener { v, e ->
-            if (e.action == MotionEvent.ACTION_DOWN) {
-                textView.setTextColor(Color.parseColor("#FFFFFF"))
-            }
-            false
-        })
+        yellowButton.setOnClickListener {
+            sttView.setTextColor(Color.parseColor("#FFFF00"))
+        }
 
-        blackButton.setOnTouchListener(OnTouchListener { v, e ->
-            if (e.action == MotionEvent.ACTION_DOWN) {
-                textView.setTextColor(Color.parseColor("#000000"))
-            }
-            false
-        })
+        greenButton.setOnClickListener {
+            sttView.setTextColor(Color.parseColor("#008000"))
+        }
+
+        blueButton.setOnClickListener{
+            sttView.setTextColor(Color.parseColor("#0000FF"))
+        }
+
+        purpleButton.setOnClickListener {
+            sttView.setTextColor(Color.parseColor("#800080"))
+        }
+
+        whiteButton.setOnClickListener {
+            sttView.setTextColor(Color.parseColor("#FFFFFF"))
+        }
+
+        blackButton.setOnClickListener{
+            sttView.setTextColor(Color.parseColor("#000000"))
+        }
 
 
         //seekBar로 글자크기 조절
         seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-                textView.setTextSize(i.toFloat())
+                sttView.setTextSize(i.toFloat())
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
 
-        textView.setOnTouchListener(this)
-        textView.setTextSize(15.toFloat())
+        sttView.setTextSize(15.toFloat())
 
         seekBar.setMax(50)
         seekBar.setMin(15)
-        seekBar.setProgress(size)
-
-    }//end of initBtn
+        seekBar.setProgress(10)
 
 
-    fun onTouch(v: View, event: MotionEvent): Boolean {
-        val width = (v.parent as ViewGroup).width - v.width
-        val height = (v.parent as ViewGroup).height - v.height
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            oldXvalue = event.x
-            oldYvalue = event.y
-        } else if (event.action == MotionEvent.ACTION_MOVE) {
-            v.x = v.x + event.x - v.width / 2
-            v.y = v.y + event.y - v.height / 2
-        } else if (event.action == MotionEvent.ACTION_UP) {
-            if (v.x > width && v.y > height) {
-                v.x = width.toFloat()
-                v.y = height.toFloat()
-            } else if (v.x < 0 && v.y > height) {
-                v.x = 0f
-                v.y = height.toFloat()
-            } else if (v.x > width && v.y < 0) {
-                v.x = width.toFloat()
-                v.y = 0f
-            } else if (v.x < 0 && v.y < 0) {
-                v.x = 0f
-                v.y = 0f
-            } else if (v.x < 0 || v.x > width) {
-                if (v.x < 0) {
-                    v.x = 0f
-                    v.y = v.y + event.y - v.height / 2
-                } else {
+        firstExitBtn.setOnClickListener {
+            dlg.dismiss()
+        }
+
+        secondExitBtn.setOnClickListener {
+            dlg.dismiss()
+        }
+
+        firstSubmitBtn.setOnClickListener{
+            toggleVisibility(View.INVISIBLE)
+            sttText = dlg.resultTxt.text.toString()
+            sttView.text = sttText
+            bitmap = mark(BitmapFactory.decodeFile(imageUrl), sttText)
+            //bitmap = BitmapFactory.decodeFile(imageUrl)
+            dlg.sttImageView.setImageBitmap(bitmap)
+        }
+
+        secondSubmitBtn.setOnClickListener{
+            toggleVisibility(View.INVISIBLE)
+
+            outputStream = FileOutputStream(imageUrl)
+            outputStream!!.write(bitmapToByteArray(bitmap!!))
+
+            listener.onOKClicked(bitmap!!)
+            Log.d("after move","X =" + moveX)
+            Log.d("after move","Y =" + moveY)
+            Log.d("after move", "sttText = " + sttText)
+            dlg.dismiss()
+        }
+
+        sttView.setOnTouchListener(OnTouchListener { v, event ->
+            val width = (v.parent as ViewGroup).width - v.width
+            val height = (v.parent as ViewGroup).height - v.height
+
+
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                oldXvalue = event.x
+                oldYvalue = event.y
+            } else if (event.action == MotionEvent.ACTION_MOVE) {
+                v.x = v.x + event.x - v.width / 2
+                v.y = v.y + event.y - v.height / 2
+                moveX = v.x;
+                moveY = v.y;
+            } else if (event.action == MotionEvent.ACTION_UP) {
+                if (v.x > width && v.y > height) {
                     v.x = width.toFloat()
-                    v.y = v.y + event.y - v.height / 2
-                }
-            } else if (v.y < 0 || v.y > height) {
-                if (v.y < 0) {
-                    v.x = v.x + event.x - v.width / 2
-                    v.y = 0f
-                } else {
-                    v.x = v.x + event.x - v.width / 2
                     v.y = height.toFloat()
+                    moveX = v.x;
+                    moveY = v.y;
+                } else if (v.x < 0 && v.y > height) {
+                    v.x = 0f
+                    v.y = height.toFloat()
+                    moveX = v.x;
+                    moveY = v.y;
+                } else if (v.x > width && v.y < 0) {
+                    v.x = width.toFloat()
+                    v.y = 0f
+                    moveX = v.x;
+                    moveY = v.y;
+                } else if (v.x < 0 && v.y < 0) {
+                    v.x = 0f
+                    v.y = 0f
+                    moveX = v.x;
+                    moveY = v.y;
+                } else if (v.x < 0 || v.x > width) {
+                    if (v.x < 0) {
+                        v.x = 0f
+                        v.y = v.y + event.y - v.height / 2
+                        moveX = v.x;
+                        moveY = v.y;
+                    } else {
+                        v.x = width.toFloat()
+                        v.y = v.y + event.y - v.height / 2
+                        moveX = v.x;
+                        moveY = v.y;
+                    }
+                } else if (v.y < 0 || v.y > height) {
+                    if (v.y < 0) {
+                        v.x = v.x + event.x - v.width / 2
+                        v.y = 0f
+                        moveX = v.x;
+                        moveY = v.y;
+                    } else {
+                        v.x = v.x + event.x - v.width / 2
+                        v.y = height.toFloat()
+                        moveX = v.x;
+                        moveY = v.y;
+                    }
                 }
             }
-        }
-        return true
-    } //end of onTouch
+            true
+        })
+    }//end of initBtn
 
 }

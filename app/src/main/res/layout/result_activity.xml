@@ -12,6 +12,7 @@
     tools:context=".tflite.ResultActivity">
 
     <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -20,7 +21,7 @@
         <ImageView
             android:id="@+id/resultImage"
             android:layout_width="match_parent"
-            android:layout_height="273dp"
+            android:layout_height="600dp"
             android:padding="2dp" />
 
         <LinearLayout

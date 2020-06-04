@@ -1,17 +1,22 @@
 package com.shinjongwoo.computer.graduateproject.tflite
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.scaleMatrix
 import com.kakao.friends.AppFriendContext
 import com.kakao.friends.AppFriendOrder
 import com.kakao.friends.response.AppFriendsResponse
@@ -25,6 +30,7 @@ import com.kakao.network.callback.ResponseCallback
 import com.kakao.network.storage.ImageUploadResponse
 import com.kakao.sdk.newtoneapi.SpeechRecognizerManager
 import com.shinjongwoo.computer.graduateproject.R
+import com.shinjongwoo.computer.graduateproject.tflite.unused.DetectBox
 import kotlinx.android.synthetic.main.result_activity.*
 import org.json.JSONArray
 import java.io.File
@@ -47,20 +53,17 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.result_activity)
 
         val faces = JSONArray(intent.getStringExtra("faces"))
-        for(i in 0 until faces.length()){
-            val facesIterator = faces.getJSONObject(i)
-            Log.d("abcd", "넘어온  $i 번째 x : " + facesIterator.getInt("x"))
-            Log.d("abcd", "넘어온  $i 번째 y : " + facesIterator.getInt("y"))
-            Log.d("abcd", "넘어온  $i 번째 w : " + facesIterator.getInt("w"))
-            Log.d("abcd", "넘어온  $i 번째 h : " + facesIterator.getInt("h"))
-            Log.d("abcd", "넘어온  $i 번째 name : " + facesIterator.getString("name"))
-        }
+
 
 
         imageUrl = intent.getStringExtra("imageUrl")
         capturedImage = BitmapFactory.decodeFile(imageUrl)
-
         resultImage.setImageBitmap(capturedImage)
+
+
+
+
+
 
         // init Part
         initUUIDs()
@@ -76,6 +79,38 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
     override fun onDestroy() {
         super.onDestroy()
         SpeechRecognizerManager.getInstance().finalizeLibrary()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+
+        val buttons = ArrayList<Button>()
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val frameLayout = inflater.inflate(R.layout.result_activity,null) as FrameLayout
+        frameLayout.setBackgroundColor(Color.parseColor("#99000000"))
+        var param = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+        val faces = JSONArray(intent.getStringExtra("faces"))
+        for(i in 0 until faces.length()){
+            val facesIterator = faces.getJSONObject(i)
+            Log.d("abcd", "넘어온  $i 번째 x : " + facesIterator.getInt("x").toFloat())
+            Log.d("abcd", "넘어온  $i 번째 y : " + facesIterator.getInt("y"))
+            Log.d("abcd", "넘어온  $i 번째 w : " + facesIterator.getInt("w"))
+            Log.d("abcd", "넘어온  $i 번째 h : " + facesIterator.getInt("h"))
+            Log.d("abcd", "넘어온  $i 번째 name : " + facesIterator.getString("name"))
+
+            var detectBox = DetectBox(facesIterator.getString("name"),
+             baseContext,
+            param,
+            this,
+                facesIterator.getInt("x").toFloat() * resultImage.width / capturedImage!!.width,
+                facesIterator.getInt("y").toFloat() * resultImage.height / capturedImage!!.height,
+                facesIterator.getInt("w") * resultImage.width / capturedImage!!.width,
+                facesIterator.getInt("h") * resultImage.height / capturedImage!!.height
+                )
+
+
+
+        }
     }
 
     // KakaoTalk Message function

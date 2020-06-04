@@ -44,7 +44,6 @@ public class HttpConnectionUtil {
             URL url = new URL("https://kapi.kakao.com/v1/vision/face/detect"); // URL 설정
             HttpsURLConnection http = (HttpsURLConnection) url.openConnection(); // 접속
 
-
             //--------------------------
             //   전송 모드 설정 - 기본적인 설정
             //--------------------------
@@ -94,7 +93,6 @@ public class HttpConnectionUtil {
             //   Response Code
             //--------------------------
             Log.d("abcd", "연결결과는 " + http.getResponseCode());
-
 
             //--------------------------
             //   서버에서 전송받기

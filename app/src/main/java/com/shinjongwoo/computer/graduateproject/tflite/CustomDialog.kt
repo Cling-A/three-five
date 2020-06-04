@@ -2,6 +2,7 @@ package com.shinjongwoo.computer.graduateproject.tflite
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.*
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +20,7 @@ import com.shinjongwoo.computer.graduateproject.R
 import kotlinx.android.synthetic.main.stt_dialog.*
 import java.io.ByteArrayOutputStream
 import java.io.FileOutputStream
+
 
 class CustomDialog(context: Context) {
     private val context: Context = context
@@ -165,10 +167,7 @@ class CustomDialog(context: Context) {
         Log.d("drawText1","X =" + moveX)
         Log.d("drawText1","Y =" + moveY)
         Log.d("drawText1", "sttText = " + sttText)
-        canvas.drawText(sttText, moveX,moveY, paint)
-        Log.d("drawText2","X =" + moveX)
-        Log.d("drawText2","Y =" + moveY)
-        Log.d("drawText2", "sttText = " + sttText)
+        canvas.drawText(sttText, moveX,moveY+100f, paint)
         return result
     }
 
@@ -295,21 +294,22 @@ class CustomDialog(context: Context) {
             toggleVisibility(View.INVISIBLE)
             sttText = dlg.resultTxt.text.toString()
             sttView.text = sttText
-            bitmap = mark(BitmapFactory.decodeFile(imageUrl), sttText)
-            //bitmap = BitmapFactory.decodeFile(imageUrl)
+            bitmap = BitmapFactory.decodeFile(imageUrl)
             dlg.sttImageView.setImageBitmap(bitmap)
         }
 
         secondSubmitBtn.setOnClickListener{
             toggleVisibility(View.INVISIBLE)
 
+            bitmap = mark(BitmapFactory.decodeFile(imageUrl), sttText)
+            Log.d("after move","X =" + moveX)
+            Log.d("after move","Y =" + moveY)
+            Log.d("after move", "sttText = " + sttText)
+
             outputStream = FileOutputStream(imageUrl)
             outputStream!!.write(bitmapToByteArray(bitmap!!))
 
             listener.onOKClicked(bitmap!!)
-            Log.d("after move","X =" + moveX)
-            Log.d("after move","Y =" + moveY)
-            Log.d("after move", "sttText = " + sttText)
             dlg.dismiss()
         }
 

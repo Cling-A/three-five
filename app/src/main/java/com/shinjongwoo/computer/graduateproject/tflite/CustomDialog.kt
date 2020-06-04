@@ -151,18 +151,17 @@ class CustomDialog(context: Context) {
             100F,
             100F,
             Color.TRANSPARENT,
-            Color.BLACK,
+            sttView.currentTextColor,
             Shader.TileMode.CLAMP
         )
         val result = Bitmap.createBitmap(w, h, src.config)
         val canvas = Canvas(result)
         canvas.drawBitmap(src, 0f, 0f, null)
         paint = Paint()
-        paint!!.setColor(Color.WHITE)
-        paint!!.setTextSize(100F)
-        paint!!.setAntiAlias(true)
-        paint!!.setShader(shader)
-        paint!!.setUnderlineText(false)
+        paint!!.textSize = sttView.textSize
+        paint!!.isAntiAlias = true
+        paint!!.shader = shader
+        paint!!.isUnderlineText = false
 
         Log.d("drawText1","X =" + moveX)
         Log.d("drawText1","Y =" + moveY)

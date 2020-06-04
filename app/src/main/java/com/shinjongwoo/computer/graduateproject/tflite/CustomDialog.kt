@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.stt_dialog.*
 import java.io.ByteArrayOutputStream
 import java.io.FileOutputStream
 
-
 class CustomDialog(context: Context) {
     private val context: Context = context
     private val dlg = Dialog(context)
@@ -36,7 +35,6 @@ class CustomDialog(context: Context) {
     private var outputStream: FileOutputStream? = null
     private lateinit var listener : MyDialogOKClickedListener
 
-
     // 호출할 다이얼로그 함수를 정의한다.
     fun callFunction(imageUrl : String) {
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)   //타이틀바 제거
@@ -48,10 +46,9 @@ class CustomDialog(context: Context) {
             SpeechRecognizerClient.Builder().setServiceType(SpeechRecognizerClient.SERVICE_TYPE_WEB)
         client = builder.build()
 
-
         recordBtn = dlg.findViewById(R.id.recordBtn)
-        firstExitBtn = dlg.findViewById(R.id.firstExitBtn)
         firstSubmitBtn = dlg.findViewById(R.id.firstSubmitBtn)
+        firstExitBtn = dlg.findViewById(R.id.firstExitBtn)
         secondExitBtn = dlg.findViewById(R.id.secondExitBtn)
         secondSubmitBtn = dlg.findViewById(R.id.secondSubmitBtn)
         sttLayout = dlg.findViewById(R.id.sttLayout)
@@ -139,7 +136,6 @@ class CustomDialog(context: Context) {
                 override fun onFinished() {
                 }
             })
-
             //음성인식 시작함
             client!!.startRecording(true)
         }
@@ -204,5 +200,4 @@ class CustomDialog(context: Context) {
     interface MyDialogOKClickedListener {
         fun onOKClicked(content : Bitmap)
     }
-
 }

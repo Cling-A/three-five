@@ -1,16 +1,12 @@
 package com.shinjongwoo.computer.graduateproject.tflite;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.util.Log;
-import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -40,10 +36,11 @@ import java.util.StringTokenizer;
 public class MainActivity extends AppCompatActivity {
     private ImageClassifier classifier;
     private Intent intent;
-    private ImageButton btnDetectObject, btnToggleCamera;
+    private ImageButton btnDetectObject, btnToggleCamera, infoButton;
     private CameraView cameraView;
 
     private FileOutputStream outputStream;
+    private DialogInterface mpopupDig = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnToggleCamera = findViewById(R.id.btnToggleCamera);
         btnDetectObject = findViewById(R.id.btnDetectObject);
+        infoButton = findViewById(R.id.infoButton);
 
         try {
             classifier = new ImageClassifier(this);
@@ -113,7 +111,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 cameraView.captureImage();            }
         });
-    }
+
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.info_dialog,null);
+                builder.setView(layout);
+                builder.create().show();
+            }//end of onClick
+        });
+    }//end of onCreate
 
     @Override
     protected void onResume() {

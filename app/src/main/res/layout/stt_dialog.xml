@@ -3,16 +3,107 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
+
+    <LinearLayout
+        android:id="@+id/sttLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:orientation="vertical"
+        android:weightSum="1"
+        app:layout_constraintTop_toTopOf="@+id/resultLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/recordBtn"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:backgroundTint="@color/color6"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/mic" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/explainTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="준비 중입니다..."
+                    android:textColor="@color/color7"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/resultTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_horizontal"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/firstSubmitBtn"
+                android:layout_width="100sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_marginLeft="20sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="20sp"
+                android:layout_marginBottom="5sp"
+                android:background="@drawable/button_background"
+                android:backgroundTint="@color/color7"
+                android:text="확인"
+                android:textColor="@color/color6"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/firstExitBtn"
+                android:layout_width="100sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginLeft="20sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="20sp"
+                android:layout_marginBottom="5sp"
+                android:background="@drawable/button_background"
+                android:backgroundTint="@color/color7"
+                android:text="종료"
+                android:textColor="@color/color6"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/resultLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="invisible"
-        tools:layout_editor_absoluteY="731dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/sttImageView"
@@ -24,78 +115,50 @@
             android:id="@+id/sttView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="STT부분이 이 곳에 들어갈 겁니다." />
+            android:gravity="center_horizontal"
+            android:text="STT부분"
+            android:textColor="@color/color7"
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center|center_horizontal"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/secondSubmitBtn"
-                android:layout_width="wrap_content"
+                android:layout_width="100sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="확인" />
+                android:layout_gravity="center|center_horizontal|center_vertical"
+                android:layout_marginLeft="20sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="20sp"
+                android:layout_marginBottom="5sp"
+                android:background="@drawable/button_background"
+                android:backgroundTint="@color/color7"
+                android:text="확인"
+                android:textColor="@color/color6"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/secondExitBtn"
-                android:layout_width="wrap_content"
+                android:layout_width="100sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="종료하기" />
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginLeft="20sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="20sp"
+                android:layout_marginBottom="5sp"
+                android:background="@drawable/button_background"
+                android:backgroundTint="@color/color7"
+                android:text="종료"
+                android:textColor="@color/color6"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/sttLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:visibility="visible">
-
-        <ImageButton
-            android:id="@+id/recordBtn"
-            android:layout_width="match_parent"
-            android:layout_height="205dp"
-            app:srcCompat="@android:drawable/presence_audio_busy"
-            tools:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/explainTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="버튼을 눌러 말하세요." />
-
-        <EditText
-            android:id="@+id/resultTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:gravity="start|top"
-            android:inputType="textMultiLine" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/firstSubmitBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="확인" />
-
-            <Button
-                android:id="@+id/firstExitBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="종료하기" />
-        </LinearLayout>
-
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:gravity="top"
         android:orientation="vertical"
+        android:visibility="invisible"
         android:weightSum="1"
         app:layout_constraintTop_toTopOf="@+id/resultLayout">
 
@@ -99,7 +100,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -111,14 +112,141 @@
             android:layout_height="wrap_content"
             tools:srcCompat="@tools:sample/avatars" />
 
-        <TextView
-            android:id="@+id/sttView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="STT부분"
-            android:textColor="@color/color7"
-            android:textSize="20sp" />
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/sttView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Move"
+                android:textColor="@android:color/black"
+                android:textSize="30dp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/darker_gray"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="40sp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp"
+                    android:text="크기"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <SeekBar
+                    android:id="@+id/seekBar"
+                    android:layout_width="300sp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/darker_gray"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="40sp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp"
+                    android:text="색상"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/redButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="#FF0000" />
+
+                <Button
+                    android:id="@+id/orangeButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="#FFA500" />
+
+                <Button
+                    android:id="@+id/yellowButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="#FFFF00" />
+
+                <Button
+                    android:id="@+id/greenButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="#008000" />
+
+                <Button
+                    android:id="@+id/blueButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="#0000FF" />
+
+                <Button
+                    android:id="@+id/purpleButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="#800080" />
+
+                <Button
+                    android:id="@+id/blackButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="#000000" />
+
+                <Button
+                    android:id="@+id/whiteButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="#FFFFFF" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

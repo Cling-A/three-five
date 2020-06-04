@@ -5,9 +5,16 @@ import android.content.Context
 import android.graphics.*
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
+import android.view.ViewGroup
 import android.view.Window
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
 import com.kakao.sdk.newtoneapi.SpeechRecognizeListener
 import com.kakao.sdk.newtoneapi.SpeechRecognizerClient
 import com.kakao.sdk.newtoneapi.SpeechRecognizerManager
@@ -34,6 +41,16 @@ class CustomDialog(context: Context) {
     private var client : SpeechRecognizerClient ?= null
     private var outputStream: FileOutputStream? = null
     private lateinit var listener : MyDialogOKClickedListener
+
+    private var paint : Paint?=null
+    private var color : Color ?= null
+
+    private var oldXvalue = 0f
+    private var oldYvalue = 0f
+
+    private var size = 10f
+
+
 
     // 호출할 다이얼로그 함수를 정의한다.
     fun callFunction(imageUrl : String) {
@@ -157,7 +174,7 @@ class CustomDialog(context: Context) {
         val result = Bitmap.createBitmap(w, h, src.config)
         val canvas = Canvas(result)
         canvas.drawBitmap(src, 0f, 0f, null)
-        val paint = Paint()
+        paint = Paint()
         paint.setColor(Color.WHITE)
         paint.setTextSize(100F)
         paint.setAntiAlias(true)
@@ -200,4 +217,126 @@ class CustomDialog(context: Context) {
     interface MyDialogOKClickedListener {
         fun onOKClicked(content : Bitmap)
     }
+
+    private fun initBtn(){
+        redButton.setOnTouchListener(OnTouchListener { v, e ->
+            if (e.action == MotionEvent.ACTION_DOWN) {
+                textView.setTextColor(Color.parseColor("#FF0000"))
+            }
+            false
+        })
+
+        orangeButton.setOnTouchListener(OnTouchListener { v, e ->
+            if (e.action == MotionEvent.ACTION_DOWN) {
+                textView.setTextColor(Color.parseColor("#FFA500"))
+            }
+            false
+        })
+
+        yellowButton.setOnTouchListener(OnTouchListener { v, e ->
+            if (e.action == MotionEvent.ACTION_DOWN) {
+                textView.setTextColor(Color.parseColor("#FFFF00"))
+            }
+            false
+        })
+
+        greenButton.setOnTouchListener(OnTouchListener { v, e ->
+            if (e.action == MotionEvent.ACTION_DOWN) {
+                textView.setTextColor(Color.parseColor("#008000"))
+            }
+            false
+        })
+
+        blueButton.setOnTouchListener(OnTouchListener { v, e ->
+            if (e.action == MotionEvent.ACTION_DOWN) {
+                textView.setTextColor(Color.parseColor("#0000FF"))
+            }
+            false
+        })
+
+        purpleButton.setOnTouchListener(OnTouchListener { v, e ->
+            if (e.action == MotionEvent.ACTION_DOWN) {
+                textView.setTextColor(Color.parseColor("#800080"))
+            }
+            false
+        })
+
+        whiteButton.setOnTouchListener(OnTouchListener { v, e ->
+            if (e.action == MotionEvent.ACTION_DOWN) {
+                textView.setTextColor(Color.parseColor("#FFFFFF"))
+            }
+            false
+        })
+
+        blackButton.setOnTouchListener(OnTouchListener { v, e ->
+            if (e.action == MotionEvent.ACTION_DOWN) {
+                textView.setTextColor(Color.parseColor("#000000"))
+            }
+            false
+        })
+
+
+        //seekBar로 글자크기 조절
+        seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+                textView.setTextSize(i.toFloat())
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+
+        textView.setOnTouchListener(this)
+        textView.setTextSize(15.toFloat())
+
+        seekBar.setMax(50)
+        seekBar.setMin(15)
+        seekBar.setProgress(size)
+
+    }//end of initBtn
+
+
+    fun onTouch(v: View, event: MotionEvent): Boolean {
+        val width = (v.parent as ViewGroup).width - v.width
+        val height = (v.parent as ViewGroup).height - v.height
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            oldXvalue = event.x
+            oldYvalue = event.y
+        } else if (event.action == MotionEvent.ACTION_MOVE) {
+            v.x = v.x + event.x - v.width / 2
+            v.y = v.y + event.y - v.height / 2
+        } else if (event.action == MotionEvent.ACTION_UP) {
+            if (v.x > width && v.y > height) {
+                v.x = width.toFloat()
+                v.y = height.toFloat()
+            } else if (v.x < 0 && v.y > height) {
+                v.x = 0f
+                v.y = height.toFloat()
+            } else if (v.x > width && v.y < 0) {
+                v.x = width.toFloat()
+                v.y = 0f
+            } else if (v.x < 0 && v.y < 0) {
+                v.x = 0f
+                v.y = 0f
+            } else if (v.x < 0 || v.x > width) {
+                if (v.x < 0) {
+                    v.x = 0f
+                    v.y = v.y + event.y - v.height / 2
+                } else {
+                    v.x = width.toFloat()
+                    v.y = v.y + event.y - v.height / 2
+                }
+            } else if (v.y < 0 || v.y > height) {
+                if (v.y < 0) {
+                    v.x = v.x + event.x - v.width / 2
+                    v.y = 0f
+                } else {
+                    v.x = v.x + event.x - v.width / 2
+                    v.y = height.toFloat()
+                }
+            }
+        }
+        return true
+    } //end of onTouch
+
 }

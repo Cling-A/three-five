@@ -2,6 +2,7 @@ package com.shinjongwoo.computer.graduateproject.tflite
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.*
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +20,7 @@ import com.shinjongwoo.computer.graduateproject.R
 import kotlinx.android.synthetic.main.stt_dialog.*
 import java.io.ByteArrayOutputStream
 import java.io.FileOutputStream
+
 
 class CustomDialog(context: Context) {
     private val context: Context = context
@@ -56,9 +58,9 @@ class CustomDialog(context: Context) {
 
     private var oldXvalue = 0f
     private var oldYvalue = 0f
-
-
-
+    private var sttText : String = ""
+    private var moveX = 0f;
+    private var moveY = 0f;
 
     // 호출할 다이얼로그 함수를 정의한다.
     fun callFunction(imageUrl : String) {
@@ -149,19 +151,22 @@ class CustomDialog(context: Context) {
             100F,
             100F,
             Color.TRANSPARENT,
-            Color.BLACK,
+            sttView.currentTextColor,
             Shader.TileMode.CLAMP
         )
         val result = Bitmap.createBitmap(w, h, src.config)
         val canvas = Canvas(result)
         canvas.drawBitmap(src, 0f, 0f, null)
         paint = Paint()
-        paint!!.setColor(Color.WHITE)
-        paint!!.setTextSize(100F)
-        paint!!.setAntiAlias(true)
-        paint!!.setShader(shader)
-        paint!!.setUnderlineText(false)
-        canvas.drawText(watermark, 10f, h - 15.toFloat(), paint)
+        paint!!.textSize = sttView.textSize
+        paint!!.isAntiAlias = true
+        paint!!.shader = shader
+        paint!!.isUnderlineText = false
+
+        Log.d("drawText1","X =" + moveX)
+        Log.d("drawText1","Y =" + moveY)
+        Log.d("drawText1", "sttText = " + sttText)
+        canvas.drawText(sttText, moveX,moveY+100f, paint)
         return result
     }
 
@@ -258,6 +263,7 @@ class CustomDialog(context: Context) {
             sttView.setTextColor(Color.parseColor("#000000"))
         }
 
+
         //seekBar로 글자크기 조절
         seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
@@ -268,11 +274,12 @@ class CustomDialog(context: Context) {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
 
-        sttView.textSize = 15f
+        sttView.setTextSize(15.toFloat())
 
-        seekBar.max = 50
-        seekBar.min = 15
-        seekBar.progress = 10
+        seekBar.setMax(50)
+        seekBar.setMin(15)
+        seekBar.setProgress(10)
+
 
         firstExitBtn.setOnClickListener {
             dlg.dismiss()
@@ -284,15 +291,19 @@ class CustomDialog(context: Context) {
 
         firstSubmitBtn.setOnClickListener{
             toggleVisibility(View.INVISIBLE)
-            val sttText : String = dlg.resultTxt.text.toString()
+            sttText = dlg.resultTxt.text.toString()
             sttView.text = sttText
-//            bitmap = mark(BitmapFactory.decodeFile(imageUrl), sttText)
             bitmap = BitmapFactory.decodeFile(imageUrl)
             dlg.sttImageView.setImageBitmap(bitmap)
         }
 
         secondSubmitBtn.setOnClickListener{
             toggleVisibility(View.INVISIBLE)
+
+            bitmap = mark(BitmapFactory.decodeFile(imageUrl), sttText)
+            Log.d("after move","X =" + moveX)
+            Log.d("after move","Y =" + moveY)
+            Log.d("after move", "sttText = " + sttText)
 
             outputStream = FileOutputStream(imageUrl)
             outputStream!!.write(bitmapToByteArray(bitmap!!))
@@ -305,40 +316,60 @@ class CustomDialog(context: Context) {
         sttView.setOnTouchListener(OnTouchListener { v, event ->
             val width = (v.parent as ViewGroup).width - v.width
             val height = (v.parent as ViewGroup).height - v.height
+
+
             if (event.action == MotionEvent.ACTION_DOWN) {
                 oldXvalue = event.x
                 oldYvalue = event.y
             } else if (event.action == MotionEvent.ACTION_MOVE) {
                 v.x = v.x + event.x - v.width / 2
                 v.y = v.y + event.y - v.height / 2
+                moveX = v.x;
+                moveY = v.y;
             } else if (event.action == MotionEvent.ACTION_UP) {
                 if (v.x > width && v.y > height) {
                     v.x = width.toFloat()
                     v.y = height.toFloat()
+                    moveX = v.x;
+                    moveY = v.y;
                 } else if (v.x < 0 && v.y > height) {
                     v.x = 0f
                     v.y = height.toFloat()
+                    moveX = v.x;
+                    moveY = v.y;
                 } else if (v.x > width && v.y < 0) {
                     v.x = width.toFloat()
                     v.y = 0f
+                    moveX = v.x;
+                    moveY = v.y;
                 } else if (v.x < 0 && v.y < 0) {
                     v.x = 0f
                     v.y = 0f
+                    moveX = v.x;
+                    moveY = v.y;
                 } else if (v.x < 0 || v.x > width) {
                     if (v.x < 0) {
                         v.x = 0f
                         v.y = v.y + event.y - v.height / 2
+                        moveX = v.x;
+                        moveY = v.y;
                     } else {
                         v.x = width.toFloat()
                         v.y = v.y + event.y - v.height / 2
+                        moveX = v.x;
+                        moveY = v.y;
                     }
                 } else if (v.y < 0 || v.y > height) {
                     if (v.y < 0) {
                         v.x = v.x + event.x - v.width / 2
                         v.y = 0f
+                        moveX = v.x;
+                        moveY = v.y;
                     } else {
                         v.x = v.x + event.x - v.width / 2
                         v.y = height.toFloat()
+                        moveX = v.x;
+                        moveY = v.y;
                     }
                 }
             }

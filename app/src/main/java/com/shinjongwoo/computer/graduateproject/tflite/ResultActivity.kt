@@ -30,7 +30,6 @@ import com.kakao.network.callback.ResponseCallback
 import com.kakao.network.storage.ImageUploadResponse
 import com.kakao.sdk.newtoneapi.SpeechRecognizerManager
 import com.shinjongwoo.computer.graduateproject.R
-import com.shinjongwoo.computer.graduateproject.tflite.unused.DetectBox
 import kotlinx.android.synthetic.main.result_activity.*
 import org.json.JSONArray
 import java.io.File
@@ -54,16 +53,9 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
 
         val faces = JSONArray(intent.getStringExtra("faces"))
 
-
-
         imageUrl = intent.getStringExtra("imageUrl")
         capturedImage = BitmapFactory.decodeFile(imageUrl)
         resultImage.setImageBitmap(capturedImage)
-
-
-
-
-
 
         // init Part
         initUUIDs()
@@ -98,18 +90,42 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
             Log.d("abcd", "넘어온  $i 번째 h : " + facesIterator.getInt("h"))
             Log.d("abcd", "넘어온  $i 번째 name : " + facesIterator.getString("name"))
 
+
+            val ratio : Float = resultImage.height.toFloat() / capturedImage!!.height.toFloat()
+
             var detectBox = DetectBox(facesIterator.getString("name"),
              baseContext,
             param,
             this,
-                facesIterator.getInt("x").toFloat() * resultImage.width / capturedImage!!.width,
-                facesIterator.getInt("y").toFloat() * resultImage.height / capturedImage!!.height,
-                facesIterator.getInt("w") * resultImage.width / capturedImage!!.width,
-                facesIterator.getInt("h") * resultImage.height / capturedImage!!.height
+                (facesIterator.getInt("x").toFloat() * ratio) + (capturedImage!!.width * (1-ratio) / 2),
+                facesIterator.getInt("y").toFloat() * ratio,
+                (facesIterator.getInt("w") * ratio).toInt(),
+                (facesIterator.getInt("h") * ratio).toInt()
                 )
 
 
 
+            val wNum = resultImage.width / capturedImage!!.width // bitmap의 width만큼 나누기
+            val hNum = resultImage.height / capturedImage!!.height
+            Log.d("abcd", "wNum : " + wNum + " / hNum : " + hNum);
+            Log.d("abcd", "resultImage.width : " + resultImage.width);
+            Log.d("abcd", "resultImage.height : " + resultImage.height);
+            Log.d("abcd", "capturedImage.width : " + capturedImage!!.width);
+            Log.d("abcd", "capturedImage.height : " + capturedImage!!.height);
+            Log.d("abcd", "plus x : " + (capturedImage!!.width * (1-ratio) / 2))
+/*            var detectBox = DetectBox(facesIterator.getString("name"),
+                baseContext,
+                param,
+                this,
+                facesIterator.getInt("x"),
+                facesIterator.getInt("y"),
+                facesIterator.getInt("w"),
+                facesIterator.getInt("h")
+            )
+
+ */
+
+            // resultImage.x
         }
     }
 

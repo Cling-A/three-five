@@ -1,4 +1,6 @@
 package com.shinjongwoo.computer.graduateproject.tflite;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -111,13 +113,35 @@ public class HttpConnectionUtil {
             JSONArray jsonArray = jsonObject.getJSONArray("faces");
             int width = jsonObject.getInt("width");
             int height = jsonObject.getInt("height");
-            for(int i = 0 ; i < jsonArray.length() ; i++){
+            for(int i = 0 ; i < jsonArray.length() ; i++) {
                 iterator = jsonArray.getJSONObject(i);
                 JSONObject data = new JSONObject();
-                data.put("x",  Math.round(iterator.getDouble("x") * width));
-                data.put("y",  Math.round(iterator.getDouble("y") * height));
-                data.put("w",  Math.round(iterator.getDouble("w") * width));
-                data.put("h",  Math.round(iterator.getDouble("h") * height));
+
+                long x =  Math.round(iterator.getDouble("x") * width);
+                long y =  Math.round(iterator.getDouble("y") * height);
+                long w =  Math.round(iterator.getDouble("w") * width);
+                long h =  Math.round(iterator.getDouble("h") * height);
+
+                // x, y 좌표 검증
+                if(x < 0)
+                    data.put("x", 0);
+                else
+                    data.put("x", x);
+                if(y < 0)
+                    data.put("y", 0);
+                else
+                    data.put("y", y);
+
+                // w, h 값 검증
+                if(x + w > width)
+                    data.put("w", width - x);
+                else
+                    data.put("w", w);
+
+                if(y + h > height)
+                    data.put("h", height - y);
+                else
+                    data.put("h", h);
                 result.put(data);
             }
             return result;

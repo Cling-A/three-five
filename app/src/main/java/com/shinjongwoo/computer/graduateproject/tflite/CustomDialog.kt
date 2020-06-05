@@ -299,6 +299,7 @@ class CustomDialog(context: Context) {
 
             listener.onOKClicked(bitmap!!)
             dlg.dismiss()
+
         }
 
         sttView.setOnTouchListener(OnTouchListener { v, event ->

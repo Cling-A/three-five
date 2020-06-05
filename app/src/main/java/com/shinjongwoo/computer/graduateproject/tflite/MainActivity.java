@@ -3,6 +3,7 @@ package com.shinjongwoo.computer.graduateproject.tflite;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -198,7 +199,14 @@ public class MainActivity extends AppCompatActivity {
             JSONArray resp = HttpConnectionUtil.postRequest(imageUrl);
             try {
                 for ( int i = 0 ; i < resp.length() ; i++) {
-                    String res = imageRecognition(Bitmap.createBitmap(cameraKitImage.getBitmap()
+                    Log.d("abcd", "i번째 : " + i);
+                    Log.d("abcd", "x : " + resp.getJSONObject(i).getInt("x"));
+                    Log.d("abcd", "y : " + resp.getJSONObject(i).getInt("y"));
+                    Log.d("abcd", "w : " + resp.getJSONObject(i).getInt("w"));
+                    Log.d("abcd", "h : " + resp.getJSONObject(i).getInt("h"));
+                    Bitmap bitmap = BitmapFactory.decodeFile(imageUrl);
+                    Log.d("abcd", "Bitmap의 X 값 : " + bitmap.getWidth() + " / Y 값 : " + bitmap.getHeight());
+                    String res = imageRecognition(Bitmap.createBitmap(BitmapFactory.decodeFile(imageUrl)
                             , resp.getJSONObject(i).getInt("x")
                             , resp.getJSONObject(i).getInt("y")
                             , resp.getJSONObject(i).getInt("w")

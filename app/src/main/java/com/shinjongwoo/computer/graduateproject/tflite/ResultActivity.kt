@@ -103,13 +103,22 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
             Log.d("abcd", "넘어온  $i 번째 name : " + facesIterator.getString("name"))
 
 
-            val ratio : Float = resultImage.height.toFloat() / capturedImage!!.height.toFloat()
+            var ratio = 1.0f
+            val xRatio = resultImage.width.toFloat() / capturedImage!!.width
+            val yRatio = resultImage.height.toFloat() / capturedImage!!.height
 
+            if(xRatio < yRatio)
+                ratio = xRatio
+            else
+                ratio = yRatio
+
+            val convertedWidth = capturedImage!!.width * ratio
+            val convertedHeight = capturedImage!!.height * ratio
             var detectBox = DetectBox(uidNickname.get(facesIterator.getString("name")),
                 facesIterator.getString("name"),
-             baseContext,
-                (facesIterator.getInt("x").toFloat() * ratio) + (capturedImage!!.width * (1-ratio) / 2),
-                facesIterator.getInt("y").toFloat() * ratio,
+                baseContext,
+                facesIterator.getInt("x") * ratio + (resultImage.width.toFloat() - convertedWidth ) / 2,
+                facesIterator.getInt("y") * ratio + (resultImage.height.toFloat() - convertedHeight ) / 2,
                 (facesIterator.getInt("w") * ratio).toInt(),
                 (facesIterator.getInt("h") * ratio).toInt()
                 )

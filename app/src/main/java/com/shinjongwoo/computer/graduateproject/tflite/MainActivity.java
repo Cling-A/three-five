@@ -40,7 +40,9 @@ public class MainActivity extends AppCompatActivity {
     private Intent intent;
     private ImageButton btnDetectObject, btnToggleCamera, infoButton;
     private CameraView cameraView;
+
     private FileOutputStream outputStream;
+    private DialogInterface mpopupDig = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,15 +84,12 @@ public class MainActivity extends AppCompatActivity {
 
                 Bitmap bitmap = scalingImage(cameraKitImage.getBitmap());
 
-                Log.d("abcd","onImage of width = "+bitmap.getWidth() + "height = " + bitmap.getHeight());
-
-            // store captured image
+                // store captured image
                 try {
                     File savedPhoto = Environment.getExternalStorageDirectory();
                     String imageUrl = savedPhoto.getPath()+"/DCIM/Camera/" + capturedTime + ".jpg";
                     outputStream = new FileOutputStream(imageUrl);
                     outputStream.write(bitmapToByteArray(bitmap));
-                    Log.d("abcd","onImage of width = "+bitmap.getWidth() + "height = " + bitmap.getHeight());
                     intent.putExtra("imageUrl", imageUrl);
                     faceDetection(cameraKitImage, imageUrl);
                 } catch (java.io.IOException e) {
@@ -181,12 +180,9 @@ public class MainActivity extends AppCompatActivity {
             Log.d("abcd", "사진이 너무 고해상도입니다. 관리자에게 문의해주시길 바랍니다.");
             return bitmap;
         }
-        //배율 설정
         else
-            Log.d("abcd", "배율 설정 Width : "+ bitmap.getWidth() + "/ Height : " + bitmap.getHeight());
             return Bitmap.createScaledBitmap(bitmap, width /60 *i, height / 60 * i, true);
     }
-
     private void faceDetection(CameraKitImage cameraKitImage, String imageUrl){
         DetectionThread detectionThread = new DetectionThread(cameraKitImage, imageUrl);
         detectionThread.start();
@@ -212,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("abcd", "w : " + resp.getJSONObject(i).getInt("w"));
                     Log.d("abcd", "h : " + resp.getJSONObject(i).getInt("h"));
                     Bitmap bitmap = BitmapFactory.decodeFile(imageUrl);
-
+                    Log.d("abcd", "Bitmap의 X 값 : " + bitmap.getWidth() + " / Y 값 : " + bitmap.getHeight());
                     String res = imageRecognition(Bitmap.createBitmap(BitmapFactory.decodeFile(imageUrl)
                             , resp.getJSONObject(i).getInt("x")
                             , resp.getJSONObject(i).getInt("y")
@@ -236,7 +232,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Uninitialized Classifier or invalid context.", Toast.LENGTH_LONG).show();
             return null;
         }
-        //글자 배율 설정
         String result = classifier.classifyFrame(Bitmap.createScaledBitmap(bitmap, 224, 224, true));
         StringTokenizer sb = new StringTokenizer(result, "\n");
         sb.nextToken();

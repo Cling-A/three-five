@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -59,6 +60,7 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("abcd", "Result Start : onCreate")
         super.onCreate(savedInstanceState)
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.result_activity)
 
         // init Part
@@ -127,7 +129,17 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
             Log.d("abcd", "넘어온  $i 번째 name : " + facesIterator.getString("name"))
 
 
-            val ratio : Float = resultImage.height.toFloat() / capturedImage!!.height.toFloat()
+            var ratio : Float = 1.0F
+            var xPoint : Float = facesIterator.getInt("x").toFloat()
+            var yPoint : Float = facesIterator.getInt("y").toFloat()
+            if(capturedImage!!.height>capturedImage!!.width) {
+                ratio = resultImage.height.toFloat() / capturedImage!!.height.toFloat()
+            }
+            else {
+                ratio = resultImage.width.toFloat() / capturedImage!!.width.toFloat()
+            }
+            xPoint = xPoint * ratio + ((resultImage.width.toFloat() - (capturedImage!!.width * ratio)) / 2.0F)
+            yPoint = yPoint * ratio + ((resultImage.height.toFloat() - (capturedImage!!.height * ratio)) / 2.0F)
             Log.d("abcd", "ratio의 값은 $ratio")
             Log.d("abcd", "resultImage.height.toFloat 값은 ${resultImage.height.toFloat()}")
             Log.d("abcd", "capturedImage!!.height.toFloat() 값은 ${capturedImage!!.height.toFloat()}")
@@ -136,10 +148,10 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
             var detectBox = DetectBox(uidNickname.get(facesIterator.getString("name")),
                 facesIterator.getString("name"),
                 baseContext,
-                (facesIterator.getInt("x").toFloat() * ratio) + (capturedImage!!.width * (1-ratio) / 2),
-                facesIterator.getInt("y").toFloat() * ratio,
-                (facesIterator.getInt("w") * ratio).toInt(),
-                (facesIterator.getInt("h") * ratio).toInt()
+                xPoint,
+                yPoint,
+                (facesIterator.getInt("w").toFloat() * ratio).toInt(),
+                (facesIterator.getInt("h").toFloat() * ratio).toInt()
             )
             Log.d("abcd", "생성한 후")
             detectBox.addView(param, this)
@@ -149,6 +161,7 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
         uuids.addAll(detectedUsers)
         for(i in 0 until boxs.size){
             Log.d("abcd", "boxs : " + i + "번째 text 값은 : " + boxs[i].getText())
+            Log.d("abcd", "boxs width : " + boxs[i].box.width + "height : "+ boxs[i].box.height)
         }
         Log.d("abcd", "//////////////////////////////")
 

@@ -2,7 +2,6 @@ package com.shinjongwoo.computer.graduateproject
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.kakao.auth.ISessionCallback
@@ -13,7 +12,6 @@ import com.kakao.usermgmt.UserManagement
 import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.exception.KakaoException
-import com.shinjongwoo.computer.graduateproject.R
 import com.shinjongwoo.computer.graduateproject.tflite.MainActivity
 
 

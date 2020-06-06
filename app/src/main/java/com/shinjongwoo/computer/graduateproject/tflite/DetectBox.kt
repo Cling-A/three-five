@@ -5,10 +5,7 @@ import android.util.Log
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import com.shinjongwoo.computer.graduateproject.R
-import com.shinjongwoo.computer.graduateproject.tflite.ResultActivity
-import org.w3c.dom.Text
 
 class DetectBox(var name: String?,
                 var uuid: String,

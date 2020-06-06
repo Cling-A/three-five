@@ -20,59 +20,59 @@
 
         </com.wonderkiln.camerakit.CameraView>
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/imageView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/color6"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/infoButton"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_margin="35dp"
-                android:adjustViewBounds="true"
-                android:background="@color/color6"
-                android:maxWidth="60dp"
-                android:maxHeight="60dp"
-                android:scaleType="fitCenter"
-                android:scaleX="1"
-                android:scaleY="1"
-                android:src="@drawable/infoicon" />
-
-            <ImageButton
-                android:id="@+id/btnDetectObject"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_margin="20dp"
-                android:adjustViewBounds="true"
-                android:background="@color/color6"
-                android:maxWidth="70dp"
-                android:maxHeight="70dp"
-                android:scaleType="fitCenter"
-                android:scaleX="1"
-                android:scaleY="1"
-                android:src="@drawable/blackshutter" />
-
-            <ImageButton
-                android:id="@+id/btnToggleCamera"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_margin="35dp"
-                android:adjustViewBounds="true"
-                android:background="@color/color6"
-                android:maxWidth="80dp"
-                android:maxHeight="80dp"
-                android:scaleType="fitCenter"
-                android:scaleX="1"
-                android:scaleY="1"
-                app:srcCompat="@drawable/rotation" />
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            tools:srcCompat="@color/color6" />
 
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/infoButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="35dp"
+        android:adjustViewBounds="true"
+        android:background="@color/color6"
+        android:maxWidth="60dp"
+        android:maxHeight="60dp"
+        android:scaleType="fitCenter"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:src="@drawable/infoicon" />
+
+    <ImageButton
+        android:id="@+id/btnToggleCamera"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="35dp"
+        android:adjustViewBounds="true"
+        android:background="@color/color6"
+        android:maxWidth="80dp"
+        android:maxHeight="80dp"
+        android:scaleType="fitCenter"
+        android:scaleX="1"
+        android:scaleY="1"
+        app:srcCompat="@drawable/rotation" />
+
+    <ImageButton
+        android:id="@+id/btnDetectObject"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:adjustViewBounds="true"
+        android:background="@color/color6"
+        android:maxWidth="70dp"
+        android:maxHeight="70dp"
+        android:scaleType="fitCenter"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:src="@drawable/blackshutter" />
 
 
 </FrameLayout>

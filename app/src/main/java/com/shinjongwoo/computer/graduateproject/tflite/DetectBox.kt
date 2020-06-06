@@ -11,9 +11,8 @@ import com.shinjongwoo.computer.graduateproject.tflite.ResultActivity
 import org.w3c.dom.Text
 
 class DetectBox(var name: String?,
+                var uuid: String,
                 context: Context,
-                param : ViewGroup.LayoutParams,
-                resultActivity: ResultActivity,
                 x: Float,
                 y: Float,
                 width: Int,
@@ -27,8 +26,6 @@ class DetectBox(var name: String?,
         setSize(width,height)
         move(x,y)
         setGreen()
-        resultActivity.addContentView(box,param)
-        resultActivity.addContentView(text,param)
         box.setOnClickListener {
             if(state == "green"){
                 setRed()
@@ -63,4 +60,10 @@ class DetectBox(var name: String?,
         text.setBackgroundColor(0xffCC0000.toInt())
         state = "red"
     }
+    fun addView(param : ViewGroup.LayoutParams,
+                resultActivity: ResultActivity){
+        resultActivity.addContentView(box,param)
+        resultActivity.addContentView(text,param)
+    }
+
 }

@@ -45,6 +45,9 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
     var convertedImageUrl : String ?= null
     val templateId = "25313"
     val templateArgs: MutableMap<String, String> = HashMap()
+    val uidNickname : MutableMap<String, String> = HashMap()
+    val boxs = mutableListOf<DetectBox>()
+    val detectedUsers = HashSet<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("abcd", "Result Start")
@@ -63,7 +66,16 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
         setupPermissions()
 
         // Listener Part
-        sendBtn.setOnClickListener{sendMyTemplate()}
+        sendBtn.setOnClickListener{
+            uuids = mutableListOf<String>()
+            for(i in boxs.iterator()){
+                if(i.state == "green"){
+                    uuids.add(i.uuid)
+                    Log.d("KAKAO_API",i.uuid)
+                }
+            }
+            sendMyTemplate()
+        }
         sttBtn.setOnClickListener(this)
         recommendBtn.setOnClickListener{sendSelected()}
     }
@@ -76,12 +88,12 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
 
-        val buttons = ArrayList<Button>()
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val frameLayout = inflater.inflate(R.layout.result_activity,null) as FrameLayout
         frameLayout.setBackgroundColor(Color.parseColor("#99000000"))
         var param = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
         val faces = JSONArray(intent.getStringExtra("faces"))
+
         for(i in 0 until faces.length()){
             val facesIterator = faces.getJSONObject(i)
             Log.d("abcd", "넘어온  $i 번째 x : " + facesIterator.getInt("x").toFloat())
@@ -93,39 +105,24 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
 
             val ratio : Float = resultImage.height.toFloat() / capturedImage!!.height.toFloat()
 
-            var detectBox = DetectBox(facesIterator.getString("name"),
+            var detectBox = DetectBox(uidNickname.get(facesIterator.getString("name")),
+                facesIterator.getString("name"),
              baseContext,
-            param,
-            this,
                 (facesIterator.getInt("x").toFloat() * ratio) + (capturedImage!!.width * (1-ratio) / 2),
                 facesIterator.getInt("y").toFloat() * ratio,
                 (facesIterator.getInt("w") * ratio).toInt(),
                 (facesIterator.getInt("h") * ratio).toInt()
                 )
+            detectBox.addView(param, this)
+            boxs.add(detectBox)
+            detectedUsers.add(facesIterator.getString("name"))
+
+        }
+        uuids.addAll(detectedUsers)
+        for(i in boxs.iterator()){
+            Log.d("abcd",i.name ?: "없음")
 
 
-
-            val wNum = resultImage.width / capturedImage!!.width // bitmap의 width만큼 나누기
-            val hNum = resultImage.height / capturedImage!!.height
-            Log.d("abcd", "wNum : " + wNum + " / hNum : " + hNum);
-            Log.d("abcd", "resultImage.width : " + resultImage.width);
-            Log.d("abcd", "resultImage.height : " + resultImage.height);
-            Log.d("abcd", "capturedImage.width : " + capturedImage!!.width);
-            Log.d("abcd", "capturedImage.height : " + capturedImage!!.height);
-            Log.d("abcd", "plus x : " + (capturedImage!!.width * (1-ratio) / 2))
-/*            var detectBox = DetectBox(facesIterator.getString("name"),
-                baseContext,
-                param,
-                this,
-                facesIterator.getInt("x"),
-                facesIterator.getInt("y"),
-                facesIterator.getInt("w"),
-                facesIterator.getInt("h")
-            )
-
- */
-
-            // resultImage.x
         }
     }
 
@@ -232,7 +229,6 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun initUUIDs(){
         var context = AppFriendContext(AppFriendOrder.NICKNAME, 0, 100, "asc")
-        uuids =  mutableListOf<String>();
         Log.d("abcd", "thread proceed 2")
         KakaoTalkService.getInstance()
             .requestAppFriends(context, object : TalkResponseCallback<AppFriendsResponse?>() {
@@ -250,8 +246,12 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
 
                 override fun onSuccess(result: AppFriendsResponse?) {
                     Log.i("KAKAO_API", "친구 조회 성공")
-                    for (friend in result!!.friends)
-                        uuids.add(friend.uuid)
+                    for (friend in result!!.friends) {
+
+                        uidNickname.put(friend.uuid,friend.profileNickname)
+                    }
+
+
                 }
             })
         }

@@ -10,6 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/color6"
+        android:backgroundTint="@color/color6"
         android:orientation="vertical">
 
         <LinearLayout
@@ -24,6 +26,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
+                android:background="@color/color6"
+                android:backgroundTint="@color/color6"
                 android:gravity="center"
                 android:text="CamAI(케미)"
                 android:textColor="@color/color7"
@@ -36,6 +40,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="20dp"
+                android:background="@color/color6"
+                android:backgroundTint="@color/color6"
                 android:text="AI 얼굴인식으로 custom model을 만들어 사진 촬영, 사진에 텍스트 추가 및 자동 전송 세가지를 동시에!"
                 android:textColor="@color/color7"
                 android:textSize="20sp"
@@ -48,6 +54,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="30dp"
                 android:adjustViewBounds="true"
+                android:background="@color/color6"
+                android:backgroundTint="@color/color6"
                 app:srcCompat="@drawable/image" />
 
         </LinearLayout>
@@ -60,6 +68,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="30dp"
+            android:background="@color/color6"
+            android:backgroundTint="@color/color6"
             android:padding="10dp" />
     </LinearLayout>
 

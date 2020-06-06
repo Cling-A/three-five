@@ -104,7 +104,6 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
 
 
             val ratio : Float = resultImage.height.toFloat() / capturedImage!!.height.toFloat()
-            Log.d("abcd", "current ratio is " + ratio)
 
             var detectBox = DetectBox(uidNickname.get(facesIterator.getString("name")),
                 facesIterator.getString("name"),

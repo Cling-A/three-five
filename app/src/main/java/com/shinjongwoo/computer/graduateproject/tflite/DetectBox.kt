@@ -65,4 +65,5 @@ class DetectBox(var name: String?,
         resultActivity.addContentView(box,param)
         resultActivity.addContentView(text,param)
     }
+
 }

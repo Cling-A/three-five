@@ -91,10 +91,6 @@ public class HttpConnectionUtil {
             fis.close();
             dos.flush();
             dos.close();
-            //--------------------------
-            //   Response Code
-            //--------------------------
-            Log.d("abcd", "연결결과는 " + http.getResponseCode());
 
             //--------------------------
             //   서버에서 전송받기

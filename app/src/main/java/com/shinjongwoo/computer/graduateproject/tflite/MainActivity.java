@@ -169,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap  scalingImage(Bitmap bitmap) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        Log.d("abcd", "Width : "+ bitmap.getWidth() + "/ Height : " + bitmap.getHeight());
         int i;
         for(i = 60 ; i >= 0 ; i--){
             if(width * height / 3600 * i * i < 1024*2048)
@@ -202,13 +201,7 @@ public class MainActivity extends AppCompatActivity {
             JSONArray resp = HttpConnectionUtil.postRequest(imageUrl);
             try {
                 for ( int i = 0 ; i < resp.length() ; i++) {
-                    Log.d("abcd", "i번째 : " + i);
-                    Log.d("abcd", "x : " + resp.getJSONObject(i).getInt("x"));
-                    Log.d("abcd", "y : " + resp.getJSONObject(i).getInt("y"));
-                    Log.d("abcd", "w : " + resp.getJSONObject(i).getInt("w"));
-                    Log.d("abcd", "h : " + resp.getJSONObject(i).getInt("h"));
                     Bitmap bitmap = BitmapFactory.decodeFile(imageUrl);
-                    Log.d("abcd", "Bitmap의 X 값 : " + bitmap.getWidth() + " / Y 값 : " + bitmap.getHeight());
                     String res = imageRecognition(Bitmap.createBitmap(BitmapFactory.decodeFile(imageUrl)
                             , resp.getJSONObject(i).getInt("x")
                             , resp.getJSONObject(i).getInt("y")
@@ -226,8 +219,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String imageRecognition(Bitmap bitmap){
-        Log.d("abcd", "imageRecognition start");
-
         if (classifier == null || this == null) {
             Toast.makeText(getApplicationContext(), "Uninitialized Classifier or invalid context.", Toast.LENGTH_LONG).show();
             return null;

@@ -53,7 +53,7 @@ class CustomDialog(context: Context) {
     private lateinit var listener : MyDialogOKClickedListener
 
     private var paint : Paint?=null
-    private var color : Color ?= null
+    //private var color : Color ?= null
 
     private var oldXvalue = 0f
     private var oldYvalue = 0f

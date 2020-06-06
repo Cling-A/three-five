@@ -25,6 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="4"
+            android:background="@color/color6"
+            android:backgroundTint="@color/color6"
             tools:srcCompat="@color/color6" />
 
     </LinearLayout>
@@ -37,6 +39,7 @@
         android:layout_margin="35dp"
         android:adjustViewBounds="true"
         android:background="@color/color6"
+        android:backgroundTint="@color/color6"
         android:maxWidth="60dp"
         android:maxHeight="60dp"
         android:scaleType="fitCenter"
@@ -52,6 +55,7 @@
         android:layout_margin="35dp"
         android:adjustViewBounds="true"
         android:background="@color/color6"
+        android:backgroundTint="@color/color6"
         android:maxWidth="80dp"
         android:maxHeight="80dp"
         android:scaleType="fitCenter"
@@ -67,6 +71,7 @@
         android:layout_marginBottom="20dp"
         android:adjustViewBounds="true"
         android:background="@color/color6"
+        android:backgroundTint="@color/color6"
         android:maxWidth="70dp"
         android:maxHeight="70dp"
         android:scaleType="fitCenter"

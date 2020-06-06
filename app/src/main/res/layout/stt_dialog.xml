@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:id="@+id/sttLayout"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="top"
         android:orientation="vertical"
@@ -19,6 +19,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/resultLayout">
 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="음성인식으로 텍스트 추가"
+            android:textColor="@color/color7"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -26,11 +36,11 @@
 
             <ImageButton
                 android:id="@+id/recordBtn"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="100dp"
                 android:adjustViewBounds="true"
                 android:backgroundTint="@color/color6"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 app:srcCompat="@drawable/mic" />
 
             <LinearLayout
@@ -44,12 +54,13 @@
                     android:layout_height="wrap_content"
                     android:text="준비 중입니다..."
                     android:textColor="@color/color7"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/resultTxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:ems="10"
                     android:gravity="start|top"
                     android:inputType="textMultiLine" />
@@ -100,7 +111,7 @@
 
     <LinearLayout
         android:id="@+id/resultLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="visible"
@@ -109,53 +120,55 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/sttImageView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                tools:srcCompat="@tools:sample/avatars" />
-
-            <TextView
-                android:id="@+id/sttView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Move"
-                android:textColor="@android:color/black"
-                android:layout_gravity="bottom|center"
-                android:textSize="30dp"
-                android:textStyle="bold" />
         </FrameLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/sttImageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/sttView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:text="Move"
+                android:textColor="@android:color/black"
+                android:textSize="30sp"
+                android:textStyle="bold" />
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="#FFFFFF"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/darker_gray"
-                android:orientation="horizontal">
+                android:background="@color/color6"
+                android:orientation="horizontal"
+                android:weightSum="10">
 
                 <TextView
                     android:id="@+id/textView"
-                    android:layout_width="40sp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_weight="1.8"
                     android:gravity="center"
-                    android:paddingTop="10sp"
-                    android:paddingBottom="10sp"
+                    android:paddingTop="5sp"
+                    android:paddingBottom="5sp"
                     android:text="크기"
                     android:textColor="@android:color/black"
                     android:textSize="15sp"
@@ -163,27 +176,33 @@
 
                 <SeekBar
                     android:id="@+id/seekBar"
-                    android:layout_width="300sp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="8.2"
                     android:paddingTop="10sp"
-                    android:paddingBottom="10sp" />
+                    android:paddingBottom="10sp"
+                    android:progressDrawable="@drawable/seekbar_seekbar1"
+                    android:thumb="@drawable/seekbar_seekbar1_thumb" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/darker_gray"
-                android:orientation="horizontal">
+                android:background="@color/color6"
+                android:orientation="horizontal"
+                android:weightSum="9">
 
                 <TextView
                     android:id="@+id/textView4"
-                    android:layout_width="40sp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_weight="2"
                     android:gravity="center"
-                    android:paddingTop="10sp"
-                    android:paddingBottom="10sp"
+                    android:paddingTop="5sp"
+                    android:paddingBottom="5sp"
                     android:text="색상"
                     android:textColor="@android:color/black"
                     android:textSize="15sp"
@@ -191,68 +210,76 @@
 
                 <Button
                     android:id="@+id/redButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="30sp"
                     android:layout_margin="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/round_button"
                     android:backgroundTint="#FF0000" />
 
                 <Button
                     android:id="@+id/orangeButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="30sp"
                     android:layout_margin="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/round_button"
                     android:backgroundTint="#FFA500" />
 
                 <Button
                     android:id="@+id/yellowButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="30sp"
                     android:layout_margin="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/round_button"
                     android:backgroundTint="#FFFF00" />
 
                 <Button
                     android:id="@+id/greenButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="30sp"
                     android:layout_margin="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/round_button"
                     android:backgroundTint="#008000" />
 
                 <Button
                     android:id="@+id/blueButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="30sp"
                     android:layout_margin="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/round_button"
                     android:backgroundTint="#0000FF" />
 
                 <Button
                     android:id="@+id/purpleButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="30sp"
                     android:layout_margin="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/round_button"
                     android:backgroundTint="#800080" />
 
                 <Button
                     android:id="@+id/blackButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="30sp"
                     android:layout_margin="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/round_button"
                     android:backgroundTint="#000000" />
-
+                <!--
                 <Button
                     android:id="@+id/whiteButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="40sp"
                     android:layout_margin="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/round_button"
                     android:backgroundTint="#FFFFFF" />
-
+-->
             </LinearLayout>
 
         </LinearLayout>
@@ -261,6 +288,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_horizontal"
+            android:background="@color/color6"
             android:gravity="center"
             android:orientation="horizontal">
 

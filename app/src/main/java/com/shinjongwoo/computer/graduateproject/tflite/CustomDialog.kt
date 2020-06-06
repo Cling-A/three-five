@@ -2,7 +2,6 @@ package com.shinjongwoo.computer.graduateproject.tflite
 
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.graphics.*
 import android.os.Bundle
 import android.util.Log
@@ -166,7 +165,7 @@ class CustomDialog(context: Context) {
         Log.d("drawText1","X =" + moveX)
         Log.d("drawText1","Y =" + moveY)
         Log.d("drawText1", "sttText = " + sttText)
-        canvas.drawText(sttText, moveX,moveY+100f, paint)
+        canvas.drawText(sttText, moveX,moveY, paint)
         return result
     }
 
@@ -218,7 +217,7 @@ class CustomDialog(context: Context) {
         greenButton = dlg.findViewById(R.id.greenButton)
         blueButton = dlg.findViewById(R.id.blueButton)
         purpleButton = dlg.findViewById(R.id.purpleButton)
-        whiteButton = dlg.findViewById(R.id.whiteButton)
+        //whiteButton = dlg.findViewById(R.id.whiteButton)
         blackButton = dlg.findViewById(R.id.blackButton)
         sttView = dlg.findViewById(R.id.sttView)
 
@@ -255,9 +254,9 @@ class CustomDialog(context: Context) {
             sttView.setTextColor(Color.parseColor("#800080"))
         }
 
-        whiteButton.setOnClickListener {
+        /*whiteButton.setOnClickListener {
             sttView.setTextColor(Color.parseColor("#FFFFFF"))
-        }
+        }*/
 
         blackButton.setOnClickListener{
             sttView.setTextColor(Color.parseColor("#000000"))

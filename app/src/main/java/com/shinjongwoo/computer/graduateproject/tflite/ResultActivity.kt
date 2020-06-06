@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
+import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -49,18 +50,19 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
     val boxs = mutableListOf<DetectBox>()
     val detectedUsers = HashSet<String>()
 
+    val param = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+    var inflater : LayoutInflater ? = null
+    var frameLayout : FrameLayout ? = null
+
+    var initState = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("abcd", "Result Start")
+        Log.d("abcd", "Result Start : onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.result_activity)
 
-        val faces = JSONArray(intent.getStringExtra("faces"))
-
-        imageUrl = intent.getStringExtra("imageUrl")
-        capturedImage = BitmapFactory.decodeFile(imageUrl)
-        resultImage.setImageBitmap(capturedImage)
-
         // init Part
+        initParams()
         initUUIDs()
         initImage()
         setupPermissions()
@@ -78,22 +80,44 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
         }
         sttBtn.setOnClickListener(this)
         recommendBtn.setOnClickListener{sendSelected()}
+        Log.d("abcd", "Result End : onCreate")
     }
 
+    // override fun
     override fun onDestroy() {
         super.onDestroy()
         SpeechRecognizerManager.getInstance().finalizeLibrary()
     }
 
+    override fun onStart() {
+        Log.d("abcd", "result onStart method started")
+        super.onStart()
+        inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        frameLayout = inflater!!.inflate(R.layout.result_activity,null) as FrameLayout
+        frameLayout!!.setBackgroundColor(Color.parseColor("#99000000"))
+        Log.d("abcd", "result onStart method End")
+    }
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
+        if(initState){
+//            initDetectBox()
+            initState = false
+        }
+    }
 
-        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val frameLayout = inflater.inflate(R.layout.result_activity,null) as FrameLayout
-        frameLayout.setBackgroundColor(Color.parseColor("#99000000"))
-        var param = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+    // initParameters
+    private fun initParams() {
+        imageUrl = intent.getStringExtra("imageUrl")
+        capturedImage = BitmapFactory.decodeFile(imageUrl)
+        resultImage.setImageBitmap(capturedImage)
+
+    }
+
+    private fun initDetectBox(){
         val faces = JSONArray(intent.getStringExtra("faces"))
-
+        Log.d("abcd", "//////////////////////////////")
+        Log.d("abcd", "검출된 얼굴의 갯수는 " + faces.length())
         for(i in 0 until faces.length()){
             val facesIterator = faces.getJSONObject(i)
             Log.d("abcd", "넘어온  $i 번째 x : " + facesIterator.getInt("x").toFloat())
@@ -104,26 +128,30 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
 
 
             val ratio : Float = resultImage.height.toFloat() / capturedImage!!.height.toFloat()
+            Log.d("abcd", "ratio의 값은 $ratio")
+            Log.d("abcd", "resultImage.height.toFloat 값은 ${resultImage.height.toFloat()}")
+            Log.d("abcd", "capturedImage!!.height.toFloat() 값은 ${capturedImage!!.height.toFloat()}")
 
+            Log.d("abcd", "생성하기 전")
             var detectBox = DetectBox(uidNickname.get(facesIterator.getString("name")),
                 facesIterator.getString("name"),
-             baseContext,
+                baseContext,
                 (facesIterator.getInt("x").toFloat() * ratio) + (capturedImage!!.width * (1-ratio) / 2),
                 facesIterator.getInt("y").toFloat() * ratio,
                 (facesIterator.getInt("w") * ratio).toInt(),
                 (facesIterator.getInt("h") * ratio).toInt()
-                )
+            )
+            Log.d("abcd", "생성한 후")
             detectBox.addView(param, this)
             boxs.add(detectBox)
             detectedUsers.add(facesIterator.getString("name"))
-
         }
         uuids.addAll(detectedUsers)
-        for(i in boxs.iterator()){
-            Log.d("abcd",i.name ?: "없음")
-
-
+        for(i in 0 until boxs.size){
+            Log.d("abcd", "boxs : " + i + "번째 text 값은 : " + boxs[i].getText())
         }
+        Log.d("abcd", "//////////////////////////////")
+
     }
 
     // KakaoTalk Message function
@@ -247,14 +275,15 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
                 override fun onSuccess(result: AppFriendsResponse?) {
                     Log.i("KAKAO_API", "친구 조회 성공")
                     for (friend in result!!.friends) {
-
                         uidNickname.put(friend.uuid,friend.profileNickname)
                     }
-
-
+                    initState = true
+                    runOnUiThread{
+                        initDetectBox()
+                    }
                 }
             })
-        }
+    }
 
 
     // STT Sdk

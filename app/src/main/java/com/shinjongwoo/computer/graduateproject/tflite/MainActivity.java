@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         return byteArray ;
     }
 
-    private Bitmap  scalingImage(Bitmap bitmap) {
+    private Bitmap scalingImage(Bitmap bitmap) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         int i;

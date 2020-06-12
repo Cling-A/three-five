@@ -1,5 +1,7 @@
 package com.shinjongwoo.computer.graduateproject.tflite;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +29,6 @@ public class HttpConnectionUtil {
         String CRLF = "\r\n";
         String TWO_HYPHENS = "--";
         String BOUNDARY = "---------------------------012345678901234567890123456";
-
 
         DataOutputStream dos = null;
         FileInputStream fis = null;
@@ -66,7 +67,6 @@ public class HttpConnectionUtil {
             dos.writeBytes("Content-Disposition: form-data; name=\"file\";" + " filename=\"" + file.getName() + "\"" + CRLF);
             dos.writeBytes(CRLF);
 
-
             fis = new FileInputStream(file);
             bytesAvailable = fis.available();
             bufferSize = Math.min(bytesAvailable, maxBufferSize);
@@ -86,6 +86,11 @@ public class HttpConnectionUtil {
             fis.close();
             dos.flush();
             dos.close();
+
+            //--------------------------
+            //   Response Code
+            //--------------------------
+            Log.d("abcd", "연결결과는 " + http.getResponseCode());
 
             //--------------------------
             //   서버에서 전송받기

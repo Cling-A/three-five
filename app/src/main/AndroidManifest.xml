@@ -30,11 +30,6 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-        <!-- 구글 얼굴 인식-->
-        <meta-data
-            android:name="com.google.android.gms.vision.DEPENDENCIES"
-            android:value="face" />
-
         <!-- 실행파트 -->
         <activity android:name=".LaunchActivity">
             <intent-filter>
@@ -53,18 +48,25 @@
         <!-- 결과파트 -->
         <activity android:name=".tflite.ResultActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="@string/kakao_scheme"
-                    android:host="kakaolink" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity android:name=".LoginActivity">
             <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 사진 다운로드 -->
+        <activity android:name=".download.DownloadActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/kakao_scheme"
+                    android:host="kakaolink" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

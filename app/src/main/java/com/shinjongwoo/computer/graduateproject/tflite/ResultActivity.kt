@@ -17,8 +17,10 @@ import androidx.core.content.ContextCompat
 import com.kakao.friends.AppFriendContext
 import com.kakao.friends.AppFriendOrder
 import com.kakao.friends.response.AppFriendsResponse
+import com.kakao.kakaolink.v2.KakaoLinkCallback
 import com.kakao.kakaolink.v2.KakaoLinkResponse
 import com.kakao.kakaolink.v2.KakaoLinkService
+import com.kakao.kakaolink.v2.network.KakaoLinkImageService
 import com.kakao.kakaotalk.callback.TalkResponseCallback
 import com.kakao.kakaotalk.response.MessageSendResponse
 import com.kakao.kakaotalk.v2.KakaoTalkService
@@ -38,9 +40,8 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
 
     var capturedImage : Bitmap ?= null
     var imageUrl : String ?= null
-    var uuids =  mutableListOf<String>();
+    var uuids =  mutableListOf<String>()
     var convertedImageUrl : String ?= null
-    val templateId = "25313"
     val templateArgs: MutableMap<String, String> = HashMap()
     val uidNickname : MutableMap<String, String> = HashMap()
     val boxs = mutableListOf<DetectBox>()
@@ -54,8 +55,6 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.result_activity)
-
-        val faces = JSONArray(intent.getStringExtra("faces"))
 
         imageUrl = intent.getStringExtra("imageUrl")
         capturedImage = BitmapFactory.decodeFile(imageUrl)
@@ -121,7 +120,6 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
             detectBox.addView(param, this)
             boxs.add(detectBox)
             detectedUsers.add(facesIterator.getString("name"))
-
         }
         uuids.addAll(detectedUsers)
     }
@@ -161,7 +159,7 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
         KakaoTalkService.getInstance()
             .sendMessageToFriends(
                 uuids,
-                templateId,
+                "25313",
                 templateArgs,
                 object : TalkResponseCallback<MessageSendResponse?>() {
                     override fun onNotKakaoTalkUser() {
@@ -208,7 +206,7 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
 
     // KakaoTalk Init function
     private fun initImage(){
-        sendBtn.isEnabled = false;
+        sendBtn.isEnabled = false
         val imageFile = File(imageUrl)
 
         KakaoLinkService.getInstance()
@@ -222,7 +220,8 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
                     Log.d("KAKAO_API", "URL: " + result.original.url)
                     convertedImageUrl = result.original.url
                     templateArgs["THU"] = result.original.url
-                    sendBtn.isEnabled = true;
+                    templateArgs["imgUri"] = result.original.url
+                    sendBtn.isEnabled = true
                 }
             })
     }

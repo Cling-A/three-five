@@ -172,6 +172,8 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
 
                     override fun onFailure(errorResult: ErrorResult) {
                         Log.e("KAKAO_API", "친구에게 보내기 실패: $errorResult")
+                        if(errorResult.errorCode == -10)
+                            Toast.makeText(getApplicationContext(), "하루 사용량을 초과하였습니다. 다음 날 시도해주시길 바랍니다.", Toast.LENGTH_LONG).show();
                     }
 
                     override fun onSuccess(result : MessageSendResponse?) {

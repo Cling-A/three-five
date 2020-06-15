@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="top"
         android:orientation="vertical"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:weightSum="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -113,7 +113,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/sttLayout"
         app:layout_constraintTop_toTopOf="parent">
 

@@ -37,7 +37,6 @@ class CustomDialog(context: Context) {
     private lateinit var greenButton : Button
     private lateinit var blueButton : Button
     private lateinit var purpleButton : Button
-    private lateinit var whiteButton : Button
     private lateinit var blackButton : Button
     private lateinit var seekBar : SeekBar
 
@@ -67,8 +66,7 @@ class CustomDialog(context: Context) {
         dlg.setCancelable(false)    //다이얼로그의 바깥 화면을 눌렀을 때 다이얼로그가 닫히지 않도록 함
 
         SpeechRecognizerManager.getInstance().initializeLibrary(context)
-        val builder =
-            SpeechRecognizerClient.Builder().setServiceType(SpeechRecognizerClient.SERVICE_TYPE_WEB)
+        val builder = SpeechRecognizerClient.Builder().setServiceType(SpeechRecognizerClient.SERVICE_TYPE_WEB)
         client = builder.build()
 
         initBtn();
@@ -155,16 +153,16 @@ class CustomDialog(context: Context) {
         val result = Bitmap.createBitmap(w, h, src.config)
         val canvas = Canvas(result)
         canvas.drawBitmap(src, 0f, 0f, null)
+        val ratio = canvas.width / dlg.sttImageView.width.toFloat()
+
         paint = Paint()
-        paint!!.textSize = sttView.textSize
+        paint!!.textSize = sttView.textSize * ratio
         paint!!.isAntiAlias = true
         paint!!.shader = shader
         paint!!.isUnderlineText = false
 
-        Log.d("drawText1","X =" + moveX)
-        Log.d("drawText1","Y =" + moveY)
-        Log.d("drawText1", "sttText = " + sttText)
-        canvas.drawText(sttText, moveX,moveY, paint)
+        canvas.drawText(sttText, moveX * ratio,  paint!!.textSize + moveY * ratio, paint)
+
         return result
     }
 
@@ -216,7 +214,6 @@ class CustomDialog(context: Context) {
         greenButton = dlg.findViewById(R.id.greenButton)
         blueButton = dlg.findViewById(R.id.blueButton)
         purpleButton = dlg.findViewById(R.id.purpleButton)
-        //whiteButton = dlg.findViewById(R.id.whiteButton)
         blackButton = dlg.findViewById(R.id.blackButton)
         sttView = dlg.findViewById(R.id.sttView)
 
@@ -226,6 +223,7 @@ class CustomDialog(context: Context) {
         // Layout
         sttLayout = dlg.findViewById(R.id.sttLayout)
         resultLayout = dlg.findViewById(R.id.resultLayout)
+
     }
 
     private fun setBtnListener(imageUrl : String){
@@ -252,10 +250,6 @@ class CustomDialog(context: Context) {
         purpleButton.setOnClickListener {
             sttView.setTextColor(Color.parseColor("#800080"))
         }
-
-        /*whiteButton.setOnClickListener {
-            sttView.setTextColor(Color.parseColor("#FFFFFF"))
-        }*/
 
         blackButton.setOnClickListener{
             sttView.setTextColor(Color.parseColor("#000000"))
@@ -314,7 +308,6 @@ class CustomDialog(context: Context) {
         sttView.setOnTouchListener(OnTouchListener { v, event ->
             val width = (v.parent as ViewGroup).width - v.width
             val height = (v.parent as ViewGroup).height - v.height
-
 
             if (event.action == MotionEvent.ACTION_DOWN) {
                 oldXvalue = event.x

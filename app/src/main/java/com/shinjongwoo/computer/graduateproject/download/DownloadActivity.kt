@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.download_activity.*
 import java.io.File
 import java.net.URL
 
-
 class DownloadActivity : AppCompatActivity() {
     var imgUri : String? = null
 

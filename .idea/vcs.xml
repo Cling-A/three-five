@@ -2,7 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/0613Test" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/merge" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/test111" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/three-five/JSex" vcs="Git" />
   </component>
 </project>

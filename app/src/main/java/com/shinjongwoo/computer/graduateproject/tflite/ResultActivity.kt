@@ -10,17 +10,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.kakao.friends.AppFriendContext
 import com.kakao.friends.AppFriendOrder
 import com.kakao.friends.response.AppFriendsResponse
-import com.kakao.kakaolink.v2.KakaoLinkCallback
 import com.kakao.kakaolink.v2.KakaoLinkResponse
 import com.kakao.kakaolink.v2.KakaoLinkService
-import com.kakao.kakaolink.v2.network.KakaoLinkImageService
 import com.kakao.kakaotalk.callback.TalkResponseCallback
 import com.kakao.kakaotalk.response.MessageSendResponse
 import com.kakao.kakaotalk.v2.KakaoTalkService
@@ -28,6 +27,12 @@ import com.kakao.network.ErrorResult
 import com.kakao.network.callback.ResponseCallback
 import com.kakao.network.storage.ImageUploadResponse
 import com.kakao.sdk.newtoneapi.SpeechRecognizerManager
+import com.kakao.usermgmt.UserManagement
+import com.kakao.usermgmt.callback.MeV2ResponseCallback
+import com.kakao.usermgmt.response.MeV2Response
+import com.kakao.usermgmt.response.model.Profile
+import com.kakao.usermgmt.response.model.UserAccount
+import com.kakao.util.OptionalBoolean
 import com.shinjongwoo.computer.graduateproject.R
 import kotlinx.android.synthetic.main.result_activity.*
 import org.json.JSONArray
@@ -43,9 +48,11 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
     var uuids =  mutableListOf<String>()
     var convertedImageUrl : String ?= null
     val templateArgs: MutableMap<String, String> = HashMap()
-    val uidNickname : MutableMap<String, String> = HashMap()
+
+    val idUuid : MutableMap<String, String> = HashMap()
+    val idNickname : MutableMap<String, String> = HashMap()
+
     val boxs = mutableListOf<DetectBox>()
-    val detectedUsers = HashSet<String>()
 
     var inflater : LayoutInflater? = null
     var frameLayout : FrameLayout ? = null
@@ -61,7 +68,7 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
         resultImage.setImageBitmap(capturedImage)
 
         // init Part
-        initUUIDs()
+        myInformation()
         initImage()
         setupPermissions()
 
@@ -70,7 +77,8 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
             uuids = mutableListOf<String>()
             for(i in boxs.iterator()){
                 if(i.state == "green"){
-                    uuids.add(i.uuid)
+                    if(!i.uuid.equals("empty"))
+                        uuids.add(i.uuid)
                     Log.d("KAKAO_API",i.uuid)
                 }
             }
@@ -109,8 +117,20 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
 
             val convertedWidth = capturedImage!!.width * ratio
             val convertedHeight = capturedImage!!.height * ratio
-            var detectBox = DetectBox(uidNickname.get(facesIterator.getString("name")),
-                facesIterator.getString("name"),
+
+            Log.d("abcd", "idNickname : " + idNickname.toString())
+            Log.d("abcd", "idUuid: " + idUuid.toString())
+
+            Log.d("abcd", "faceIterator : " + facesIterator.getString("name"))
+
+            val nickname = idNickname.get(facesIterator.getString("name"))
+            var uuid = idUuid.get(facesIterator.getString("name"))
+
+            if(uuid == null)
+                uuid = "empty"
+
+            var detectBox = DetectBox(nickname,
+                uuid,
                 baseContext,
                 facesIterator.getInt("x") * ratio + (resultImage.width.toFloat() - convertedWidth ) / 2,
                 facesIterator.getInt("y") * ratio + (resultImage.height.toFloat() - convertedHeight ) / 2,
@@ -119,9 +139,8 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
             )
             detectBox.addView(param, this)
             boxs.add(detectBox)
-            detectedUsers.add(facesIterator.getString("name"))
         }
-        uuids.addAll(detectedUsers)
+
     }
 
     // KakaoTalk Message function
@@ -174,6 +193,8 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
                         Log.e("KAKAO_API", "친구에게 보내기 실패: $errorResult")
                         if(errorResult.errorCode == -10)
                             Toast.makeText(getApplicationContext(), "하루 사용량을 초과하였습니다. 다음 날 시도해주시길 바랍니다.", Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(getApplicationContext(), "에러가 발생했습니다. 관리자에게 문의해주세요.", Toast.LENGTH_LONG).show();
                     }
 
                     override fun onSuccess(result : MessageSendResponse?) {
@@ -228,6 +249,27 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
             })
     }
 
+    private fun myInformation(){
+        UserManagement.getInstance()
+            .me(object : MeV2ResponseCallback() {
+                override fun onSessionClosed(errorResult: ErrorResult) {
+                    Log.e("KAKAO_API", "세션이 닫혀 있음: $errorResult")
+                }
+
+                override fun onFailure(errorResult: ErrorResult) {
+                    Log.e("KAKAO_API", "사용자 정보 요청 실패: $errorResult")
+                }
+
+                override fun onSuccess(result: MeV2Response) {
+                    Log.i("KAKAO_API", "사용자 아이디: " + result.id)
+                    setIdNickname(result.id.toString(), result.kakaoAccount.profile.nickname)
+                    runOnUiThread{
+                        initUUIDs()
+                    }
+                }
+            })
+    }
+
     private fun initUUIDs(){
         var context = AppFriendContext(AppFriendOrder.NICKNAME, 0, 100, "asc")
         KakaoTalkService.getInstance()
@@ -247,15 +289,15 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
                 override fun onSuccess(result: AppFriendsResponse?) {
                     Log.i("KAKAO_API", "친구 조회 성공")
                     for (friend in result!!.friends) {
-
-                        uidNickname.put(friend.uuid,friend.profileNickname)
+                        setIdNickname(friend.id.toString(), friend.profileNickname)
+                        idUuid[friend.id.toString()] = friend.uuid
                     }
                     runOnUiThread{
                         initDetectBox()
                     }
                 }
             })
-        }
+    }
 
 
     // STT Sdk
@@ -308,5 +350,9 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
                 dlg.callFunction(imageUrl!!);
             }
         }
+    }
+
+    @Synchronized fun setIdNickname(key : String, value : String){
+        idNickname[key] = value
     }
 }

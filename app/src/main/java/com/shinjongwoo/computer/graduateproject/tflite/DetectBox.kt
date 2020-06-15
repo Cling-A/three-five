@@ -2,6 +2,7 @@ package com.shinjongwoo.computer.graduateproject.tflite
 
 import android.content.Context
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
@@ -36,6 +37,8 @@ class DetectBox(var name: String?,
             }
         }
     }
+
+
 
     fun move(x: Float, y:Float){
         box.x = x

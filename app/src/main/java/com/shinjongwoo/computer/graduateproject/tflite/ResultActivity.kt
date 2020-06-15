@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -129,11 +130,13 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
             if(uuid == null)
                 uuid = "empty"
 
+            var textView = findViewById<View>(R.id.photoRe) as TextView
+
             var detectBox = DetectBox(nickname,
                 uuid,
                 baseContext,
                 facesIterator.getInt("x") * ratio + (resultImage.width.toFloat() - convertedWidth ) / 2,
-                facesIterator.getInt("y") * ratio + (resultImage.height.toFloat() - convertedHeight ) / 2,
+                facesIterator.getInt("y") * ratio + (resultImage.height.toFloat() - convertedHeight )  / 2 + textView.height,
                 (facesIterator.getInt("w") * ratio).toInt(),
                 (facesIterator.getInt("h") * ratio).toInt()
             )

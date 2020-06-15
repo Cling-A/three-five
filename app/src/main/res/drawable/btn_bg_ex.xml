@@ -14,10 +14,10 @@
         android:top="8dp" />
 
     <corners
-        android:bottomLeftRadius="12dp"
-        android:bottomRightRadius="12dp"
-        android:topLeftRadius="12dp"
-        android:topRightRadius="12dp" />
+        android:bottomLeftRadius="25dp"
+        android:bottomRightRadius="25dp"
+        android:topLeftRadius="25dp"
+        android:topRightRadius="25dp" />
     <!-- 테두리 설정: 두께, 색상 -->
     <stroke
         android:width="7dp"

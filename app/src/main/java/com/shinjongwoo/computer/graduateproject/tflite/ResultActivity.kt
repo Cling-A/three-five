@@ -346,7 +346,9 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
             sttBtn.id -> {
                 Log.d("abcd", "sttBtn clicked")
                 val dlg = CustomDialog(this)
+                Log.d("abcd", "sttBtn clicked1")
                 dlg.setOnOKClickedListener{ content ->
+                    Log.d("abcd", "sttBtn clicked2")
                     resultImage.setImageBitmap(content)
                     initImage()
                 }

@@ -2,7 +2,6 @@ package com.shinjongwoo.computer.graduateproject.tflite
 
 import android.content.Context
 import android.util.Log
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
@@ -35,11 +34,8 @@ class DetectBox(var name: String?,
                 setGreen()
                 Log.d("abcd", "red to green")
             }
-            text.text = "전종석"
         }
     }
-
-
 
     fun move(x: Float, y:Float){
         box.x = x

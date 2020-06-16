@@ -6,13 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -45,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private CameraView cameraView;
 
     private FileOutputStream outputStream;
+    private DialogInterface mpopupDig = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
                 builder.create().show();
             }//end of onClick
         });
-
     }//end of onCreate
 
     @Override

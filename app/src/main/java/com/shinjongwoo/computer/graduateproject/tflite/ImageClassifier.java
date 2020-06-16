@@ -1,11 +1,8 @@
 /* Copyright 2017 The TensorFlow Authors. All Rights Reserved.
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
     http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -85,22 +82,22 @@ public class ImageClassifier {
   private static final float FILTER_FACTOR = 0.4f;
 
   private PriorityQueue<Map.Entry<String, Float>> sortedLabels =
-      new PriorityQueue<>(
-          RESULTS_TO_SHOW,
-          new Comparator<Map.Entry<String, Float>>() {
-            @Override
-            public int compare(Map.Entry<String, Float> o1, Map.Entry<String, Float> o2) {
-              return (o1.getValue()).compareTo(o2.getValue());
-            }
-          });
+          new PriorityQueue<>(
+                  RESULTS_TO_SHOW,
+                  new Comparator<Map.Entry<String, Float>>() {
+                    @Override
+                    public int compare(Map.Entry<String, Float> o1, Map.Entry<String, Float> o2) {
+                      return (o1.getValue()).compareTo(o2.getValue());
+                    }
+                  });
 
   /** Initializes an {@code ImageClassifier}. */
   ImageClassifier(Activity activity) throws IOException {
     tflite = new Interpreter(loadModelFile(activity));
     labelList = loadLabelList(activity);
     imgData =
-        ByteBuffer.allocateDirect(
-            4 * DIM_BATCH_SIZE * DIM_IMG_SIZE_X * DIM_IMG_SIZE_Y * DIM_PIXEL_SIZE);
+            ByteBuffer.allocateDirect(
+                    4 * DIM_BATCH_SIZE * DIM_IMG_SIZE_X * DIM_IMG_SIZE_Y * DIM_PIXEL_SIZE);
     imgData.order(ByteOrder.nativeOrder());
     labelProbArray = new float[1][labelList.size()];
     filterLabelProbArray = new float[FILTER_STAGES][labelList.size()];
@@ -135,14 +132,14 @@ public class ImageClassifier {
     // Low pass filter `labelProbArray` into the first stage of the filter.
     for(int j=0; j<num_labels; ++j){
       filterLabelProbArray[0][j] += FILTER_FACTOR*(labelProbArray[0][j] -
-                                                   filterLabelProbArray[0][j]);
+              filterLabelProbArray[0][j]);
     }
     // Low pass filter each stage into the next.
     for (int i=1; i<FILTER_STAGES; ++i){
       for(int j=0; j<num_labels; ++j){
         filterLabelProbArray[i][j] += FILTER_FACTOR*(
                 filterLabelProbArray[i-1][j] -
-                filterLabelProbArray[i][j]);
+                        filterLabelProbArray[i][j]);
 
       }
     }
@@ -163,7 +160,7 @@ public class ImageClassifier {
   private List<String> loadLabelList(Activity activity) throws IOException {
     List<String> labelList = new ArrayList<String>();
     BufferedReader reader =
-        new BufferedReader(new InputStreamReader(activity.getAssets().open(LABEL_PATH)));
+            new BufferedReader(new InputStreamReader(activity.getAssets().open(LABEL_PATH)));
     String line;
     while ((line = reader.readLine()) != null) {
       labelList.add(line);
@@ -208,7 +205,7 @@ public class ImageClassifier {
   private String printTopKLabels() {
     for (int i = 0; i < labelList.size(); ++i) {
       sortedLabels.add(
-          new AbstractMap.SimpleEntry<>(labelList.get(i), labelProbArray[0][i]));
+              new AbstractMap.SimpleEntry<>(labelList.get(i), labelProbArray[0][i]));
       if (sortedLabels.size() > RESULTS_TO_SHOW) {
         sortedLabels.poll();
       }

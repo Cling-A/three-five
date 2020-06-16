@@ -10,11 +10,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/color6"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/color6"
             android:orientation="vertical">
 
             <TextView
@@ -22,11 +25,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20sp"
+                android:layout_marginTop="15sp"
                 android:gravity="center"
                 android:text="CamAI(케미)"
                 android:textColor="@color/color7"
-                android:textSize="40sp"
+                android:textSize="50sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -34,8 +37,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_margin="20sp"
-                android:text="AI 얼굴인식으로 custom model을 만들어\n사진 촬영, 사진에 텍스트 추가 및 자동 전송 세가지를 동시에!"
+                android:layout_marginLeft="20sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="20sp"
+                android:layout_marginBottom="20sp"
+                android:text="AI 얼굴인식으로 custom model을 만들어 사진 촬영, 사진에 텍스트 추가, 자동 전송 세가지를 동시에!"
                 android:textColor="@color/color7"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -43,23 +49,24 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="350sp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="30sp"
+                android:layout_marginBottom="25sp"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/image" />
 
         </LinearLayout>
-    </LinearLayout>
 
-    <com.kakao.usermgmt.LoginButton
-        android:id="@+id/com_kakao_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="20sp"
-        android:layout_marginRight="20sp"
-        android:layout_marginBottom="30sp"
-        android:padding="10sp" />
+        <com.kakao.usermgmt.LoginButton
+            android:id="@+id/com_kakao_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginBottom="10sp"
+            android:padding="10sp" />
+
+    </LinearLayout>
 
 </FrameLayout>

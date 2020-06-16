@@ -11,9 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -59,6 +57,7 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
     var inflater : LayoutInflater? = null
     var frameLayout : FrameLayout ? = null
     var param = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,13 +129,11 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
             if(uuid == null)
                 uuid = "empty"
 
-            var textView = findViewById<View>(R.id.photoRe) as TextView
-
             var detectBox = DetectBox(nickname,
                 uuid,
                 baseContext,
                 facesIterator.getInt("x") * ratio + (resultImage.width.toFloat() - convertedWidth ) / 2,
-                facesIterator.getInt("y") * ratio + (resultImage.height.toFloat() - convertedHeight )  / 2 + textView.height,
+                facesIterator.getInt("y") * ratio + (resultImage.height.toFloat() - convertedHeight ) / 2 + photoRe.height,
                 (facesIterator.getInt("w") * ratio).toInt(),
                 (facesIterator.getInt("h") * ratio).toInt()
             )
@@ -346,9 +343,7 @@ class ResultActivity : AppCompatActivity(), View.OnClickListener {
             sttBtn.id -> {
                 Log.d("abcd", "sttBtn clicked")
                 val dlg = CustomDialog(this)
-                Log.d("abcd", "sttBtn clicked1")
                 dlg.setOnOKClickedListener{ content ->
-                    Log.d("abcd", "sttBtn clicked2")
                     resultImage.setImageBitmap(content)
                     initImage()
                 }

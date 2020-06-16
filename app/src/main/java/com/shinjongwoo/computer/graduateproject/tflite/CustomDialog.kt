@@ -90,13 +90,13 @@ class CustomDialog(context: Context) {
                 override fun onReady() {
                     Log.d("STT", "모든 하드웨어 및 오디오 서비스가 준비되었습니다.")
                     // TODO 아이콘 바꾸기
-                    dlg.explainTxt.text="준비가 되었습니다."
+                    dlg.explainTxt.text="음성인식 시작.."
                 }
 
                 override fun onBeginningOfSpeech() {
                     Log.d("STT", "사용자가 말을 하기 시작했습니다.")
                     // TODO 아이콘 바꾸기 (실행중이라는 직관적인 것으로)
-                    dlg.explainTxt.text = "인식 중 입니다."
+                    dlg.explainTxt.text = "음성인식 중.."
                 }
 
                 override fun onEndOfSpeech() {

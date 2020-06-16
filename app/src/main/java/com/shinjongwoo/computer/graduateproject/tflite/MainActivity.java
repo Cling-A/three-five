@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         try{
-                outputStream.close();
+            outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

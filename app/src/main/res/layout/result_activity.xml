@@ -23,13 +23,13 @@
             android:gravity="center|center_horizontal"
             android:text="촬영 결과"
             android:textColor="@color/color6"
-            android:textSize="40sp"
+            android:textSize="60sp"
             android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/resultImage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:adjustViewBounds="true" />
 

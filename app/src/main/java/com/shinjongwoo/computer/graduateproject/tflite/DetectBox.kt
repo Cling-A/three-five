@@ -35,6 +35,7 @@ class DetectBox(var name: String?,
                 setGreen()
                 Log.d("abcd", "red to green")
             }
+            text.text = "전종석"
         }
     }
 

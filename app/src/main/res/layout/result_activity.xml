@@ -5,72 +5,72 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/color6"
     tools:context=".tflite.ResultActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/color6"
+        android:background="@color/color7"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/photoRe"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|center_horizontal"
+            android:text="촬영 결과"
+            android:textColor="@color/color6"
+            android:textSize="60sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/resultImage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:adjustViewBounds="true" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
-            android:background="@color/color6"
-            android:backgroundTint="@color/color6"
-            android:orientation="vertical"
-            android:weightSum="3">
+            android:layout_width="wrap_content"
+            android:layout_height="100sp"
+            android:gravity="center|center_horizontal|center_vertical"
+            android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/sendBtn"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_gravity="fill_horizontal"
-                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
                 android:layout_weight="1"
-                android:background="@drawable/button_background"
-                android:backgroundTint="@color/color7"
-                android:text="사진보내기"
-                android:textColor="@color/color6"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:background="@drawable/btn_bg_ex"
+                android:padding="15sp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/sendphoto" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/sttBtn"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_gravity="fill_horizontal"
-                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
                 android:layout_weight="1"
-                android:background="@drawable/button_background"
-                android:backgroundTint="@color/color7"
-                android:text="사진에 음성으로 텍스트 추가"
-                android:textColor="@color/color6"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:background="@drawable/btn_bg_ex"
+                android:padding="15sp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/addtext" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/recommendBtn"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_gravity="bottom|fill_horizontal"
-                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
                 android:layout_weight="1"
-                android:background="@drawable/button_background"
-                android:backgroundTint="@color/color7"
-                android:text="이 앱 친구에게 추천하기"
-                android:textColor="@color/color6"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:background="@drawable/btn_bg_ex"
+                android:padding="15sp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/share" />
         </LinearLayout>
 
     </LinearLayout>

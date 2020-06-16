@@ -10,6 +10,7 @@
         android:id="@+id/sttLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/color6"
         android:gravity="top"
         android:orientation="vertical"
         android:visibility="visible"
@@ -24,9 +25,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5sp"
             android:gravity="center"
-            android:text="음성인식으로 텍스트 추가"
+            android:text="사진에 텍스트 추가"
             android:textColor="@color/color7"
-            android:textSize="20sp"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -37,41 +38,62 @@
             <ImageButton
                 android:id="@+id/recordBtn"
                 android:layout_width="wrap_content"
-                android:layout_height="100dp"
+                android:layout_height="60dp"
+                android:layout_margin="5sp"
                 android:adjustViewBounds="true"
-                android:backgroundTint="@color/color6"
+                android:background="@drawable/button_background"
+                android:backgroundTint="@color/color7"
                 android:scaleType="fitXY"
                 app:srcCompat="@drawable/mic" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="5sp"
+                android:paddingRight="5sp"
+                android:paddingBottom="5sp">
 
-                <TextView
-                    android:id="@+id/explainTxt"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5sp"
-                    android:layout_marginTop="20sp"
-                    android:text="준비 중입니다..."
-                    android:textColor="@color/color7"
-                    android:textSize="16sp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp"
+                        android:background="@color/color6"
+                        android:text="음성인식 상태 : "
+                        android:textColor="@color/color7"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/explainTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp"
+                        android:background="@color/color6"
+                        android:text="준비 중..."
+                        android:textColor="@color/color7"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/resultTxt"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_margin="5sp"
-                    android:ems="10"
-                    android:gravity="start|top"
-                    android:inputType="textMultiLine" />
+                    android:background="@color/color6"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/color7" />
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_horizontal"
             android:gravity="center"
@@ -79,7 +101,7 @@
 
             <Button
                 android:id="@+id/firstSubmitBtn"
-                android:layout_width="100sp"
+                android:layout_width="80sp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_horizontal|center_vertical"
                 android:layout_marginLeft="20sp"
@@ -95,7 +117,7 @@
 
             <Button
                 android:id="@+id/firstExitBtn"
-                android:layout_width="100sp"
+                android:layout_width="80sp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:layout_marginLeft="20sp"
@@ -115,6 +137,7 @@
         android:id="@+id/resultLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/color6"
         android:orientation="vertical"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/sttLayout"
@@ -144,7 +167,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
                 android:text="Move"
-                android:textColor="@android:color/black"
+                android:textColor="@color/color7"
                 android:textSize="30sp"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -158,7 +181,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/color6"
                 android:orientation="horizontal"
                 android:weightSum="10">
 
@@ -172,8 +194,8 @@
                     android:paddingTop="5sp"
                     android:paddingBottom="5sp"
                     android:text="크기"
-                    android:textColor="@android:color/black"
-                    android:textSize="15sp"
+                    android:textColor="@color/color7"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <SeekBar
@@ -192,7 +214,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/color6"
                 android:orientation="horizontal"
                 android:weightSum="9">
 
@@ -206,8 +227,8 @@
                     android:paddingTop="5sp"
                     android:paddingBottom="5sp"
                     android:text="색상"
-                    android:textColor="@android:color/black"
-                    android:textSize="15sp"
+                    android:textColor="@color/color7"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <Button
@@ -290,7 +311,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_horizontal"
-            android:background="@color/color6"
             android:gravity="center"
             android:orientation="horizontal">
 

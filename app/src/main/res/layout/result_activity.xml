@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/color6"
+        android:background="@color/color7"
         android:orientation="vertical">
 
         <TextView
@@ -22,8 +22,8 @@
             android:layout_weight="1"
             android:gravity="center|center_horizontal"
             android:text="촬영 결과"
-            android:textColor="@color/color7"
-            android:textSize="50sp"
+            android:textColor="@color/color6"
+            android:textSize="40sp"
             android:textStyle="bold" />
 
         <ImageView
